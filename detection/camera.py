@@ -23,9 +23,9 @@ def get_frames():
 
                 if conf > 0.6:  # only strong detections
                     Detection.objects.create(
-                    label=label,
-                    confidence=conf
-                )
+                        label=label,
+                        confidence=conf
+                    )
 
         annotated = r[0].plot()
 
