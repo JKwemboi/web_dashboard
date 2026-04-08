@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VidManage – Video Streaming Management Dashboard Template (Free)</title>
+    <!-- Stylesheets -->
+    <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./assets/icons/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+    <link href="./assets/icons/fontawesome/css/brands.min.css" rel="stylesheet">
+    <link href="./assets/icons/fontawesome/css/solid.min.css" rel="stylesheet">
+    <link href="./assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+    <!-- Main Wrapper -->
+    <div id="main-wrapper" class="d-flex">
+        <div class="sidebar">
+                <!-- Sidebar -->
+               <div class="sidebar-header">
+                   <div class="lg-logo"><a href="index.html"><img src="./assets/images/logo.png" class="large-logo-img" alt="logo large"></a></div>
+                   <div class="sm-logo"><a href="index.html"><img src="./assets/images/small-logo.png" class="small-logo-img" alt="logo small"></a></div>
+               </div>
+               <div class="sidebar-body  custom-scrollbar">
+                    <ul class="sidebar-menu">
+                        <li class="sidebar-label">Main</li>
+                        <li><a href="index.html" class="sidebar-link"><i class="fa-solid fa-house"></i><p>Dashboard</p></a></li>
+                        <li><a href="analytics.html" class="sidebar-link"><i class="fa-solid fa-chart-line"></i><p>Analytics</p></a></li>
+                        <li class="sidebar-label mt-4">Content</li>
+                        <li><a href="movie.html" class="sidebar-link"><i class="fa-solid fa-film"></i><p>Movies <span class="badge bg-primary ms-auto">1,247</span></p></a></li>
+                        <li><a href="tv-show.html" class="sidebar-link"><i class="fa-solid fa-tv"></i><p>TV Shows</p></a></li>
+                        <li><a href="genres.html" class="sidebar-link"><i class="fa-solid fa-tags"></i><p>Genres</p></a></li>
+                        <li><a href="reviews.html" class="sidebar-link active"><i class="fa-solid fa-star"></i><p>Reviews</p></a></li>
+                        <li class="sidebar-label mt-4">Users</li>
+                        <li><a href="users.html" class="sidebar-link"><i class="fa-solid fa-users"></i><p>All Users</p></a></li>
+                        <li><a href="admins.html" class="sidebar-link"><i class="fa-solid fa-user-shield"></i><p>Admins</p></a></li>
+                        <li class="sidebar-label mt-4">System</li>
+                        <li><a href="setting.html" class="sidebar-link"><i class="fa-solid fa-cog"></i><p>Settings</p></a></li>
+                        <li><a href="security.html" class="sidebar-link"><i class="fa-solid fa-shield-alt"></i><p>Security</p></a></li>
+                        <li class="sidebar-label mt-4">Pages</li>
+                        <li><a href="login.html" class="sidebar-link"><i class="fa-solid fa-user"></i><p>Login</p></a></li>
+                        <li><a href="signup.html" class="sidebar-link"><i class="fa-solid fa-user-plus"></i><p>Signup</p></a></li>
+                        <li><a href="forgotpassword.html" class="sidebar-link"><i class="fa-solid fa-unlock"></i><p>Forgot password</p></a></li>
+                        <li><a href="404.html" class="sidebar-link"><i class="fa-solid fa-exclamation"></i><p>404</p></a></li>
+                        <li><a href="500.html" class="sidebar-link"><i class="fa-solid fa-triangle-exclamation"></i><p>500</p></a></li>
+                    
+                    </ul>
+               </div>
+        </div>
+
+
+         <!-- Header -->
+         <div class="header d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+              <div class="menu-toggle me-3 d-block d-lg-none text-color-1"><span><i class="fa-solid fa-bars font-size-24"></i></span></div>
+              <div class="d-none d-md-block d-lg-block">
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Search anything..." >
+                    </div>
+              </div>
+          </div>
+          <div class="d-flex align-items-center">
+              <ul class="nav d-flex align-items-center">
+                  <!-- Messages Dropdown -->
+                  <li class="nav-item me-4">
+                      <a href="#" class="text-color-1 position-relative header-nav-item"  role="button" 
+                        data-bs-toggle="dropdown" 
+                        data-bs-offset="0,0" 
+                        aria-expanded="false">
+                        <i class="fa-solid fa-envelope fa-lg"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-end mt-4">
+                          <div id="chatmessage" class="h-380 scroll-y p-3 custom-scrollbar">
+                              <!-- Chat Timeline -->
+                              <ul class="timeline">
+                                  <!-- Item 1 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-1.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">We talked about a project...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> 30 min ago</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <!-- Item 2 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-2.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">You sent an email to the client...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> 1 hour ago</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <!-- Item 3 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-3.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Meeting with the design team...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> 2 hours ago</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <!-- Item 4 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-4.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Reviewed the project documents...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> Yesterday</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <!-- Item 5 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-5.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Finalized the project timeline...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> 2 days ago</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                              </ul>
+                          </div>
+                          <a class="all-notification" href="#">See all message <i class="fas fa-arrow-right"></i></a>
+                      </div>
+                  </li>
+                  <!-- Notifications Dropdown -->
+                  <li class="nav-item me-4">
+                      <a href="#" class="text-color-1 notification header-nav-item" 
+                          role="button" 
+                          data-bs-toggle="dropdown" 
+                          data-bs-offset="0,0" 
+                          aria-expanded="false">
+                          <i class="fa-regular fa-bell fa-lg"></i>
+                          
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-end mt-4">
+                          <div id="Notification" class="h-380 scroll-y p-3 custom-scrollbar">
+                              <!-- Notifications Timeline -->
+                              <ul class="timeline">
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/profile.png">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Dr Smith uploaded a new report</h6>
+                                              <small class="d-block">10 December 2023 - 08:15 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2 media-info">
+                                              AP
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">New Appointment Scheduled</h6>
+                                              <small class="d-block">10 December 2023 - 09:45 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2 media-success">
+                                              <i class="fa fa-check-circle"></i>
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Patient checked in at reception</h6>
+                                              <small class="d-block">10 December 2023 - 10:20 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/profile.png">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Dr Alice shared a prescription</h6>
+                                              <small class="d-block">10 December 2023 - 11:00 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2 media-danger">
+                                              EM
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Emergency Alert: Critical Patient</h6>
+                                              <small class="d-block">10 December 2023 - 11:30 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2 media-primary">
+                                              <i class="fa fa-calendar-alt"></i>
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Next Appointment Reminder</h6>
+                                              <small class="d-block">10 December 2023 - 12:00 PM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                              </ul>
+                              
+                          </div>
+                          <a class="all-notification" href="#">See all notifications <i class="fas fa-arrow-right"></i></a>
+                      </div>
+                  </li>
+                  <li class="nav-item me-4" id="themeToggle">
+                     <span class="header-nav-item sun-icon">
+                         <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 20 20">
+                             <path fill-rule="evenodd"  d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                         </svg>
+                     </span>
+                     <span class="moon-icon header-nav-item d-none">
+                         <svg fill="currentColor" width="20px" height="20px"  viewBox="0 0 20 20">
+                             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                         </svg>
+                     </span>
+                  </li>
+                   <!-- User Profile -->
+                  <li class="nav-item dropdown user-profile">
+                      <div class="d-flex align-items-center dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                          <img src="./assets/images/avatar-6.png" class="user-avatar" alt="">
+                          <div>
+                              <ul class="dropdown-menu mt-3">
+                                <li><a class="dropdown-item py-2" href="profile.html"><i class="fa-solid fa-user me-2 text-success"></i>Profile</a></li>
+                                <li><a class="dropdown-item py-2" href="#"><i class="fa-solid fa-gear me-2 text-info"></i>Setting</a></li>
+                                <li><a class="dropdown-item py-2" href="#"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i>Logout</a></li>
+                            </ul>
+                          </div>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+       </div>
+       <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Main Content -->
+            <div class="main-content">
+               <div class="page-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Reviews</h1>
+                <p class="page-subtitle">Monitor, moderate, and analyze user reviews across your platform</p>
+            </div>
+
+            <!-- Review Statistics -->
+            <div class="row review-stats">
+                 <div class="col-lg-3 col-md-6 col-12 mb-3">
+                    <div class="stat-card">
+                    <div class="stat-icon primary">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-value">2,847</div>
+                    <div class="stat-label">Total Reviews</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        12% from last month
+                    </div>
+                </div>
+                 </div>
+                 <div class="col-lg-3 col-md-6 col-12 mb-3">
+                 <div class="stat-card positive">
+                    <div class="stat-icon success">
+                        <i class="fas fa-thumbs-up"></i>
+                    </div>
+                    <div class="stat-value">1,892</div>
+                    <div class="stat-label">Positive Reviews</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        8% from last month
+                    </div>
+                </div>
+                 </div>
+                 <div class="col-lg-3 col-md-6 col-12 mb-3">
+                 <div class="stat-card pending">
+                    <div class="stat-icon warning">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">Pending Reviews</div>
+                    <div class="stat-change negative">
+                        <i class="fas fa-arrow-down"></i>
+                        15% from last month
+                    </div>
+                </div>
+                 </div>
+                 <div class="col-lg-3 col-md-6 col-12 mb-3">
+                <div class="stat-card">
+                    <div class="stat-icon primary">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-value">4.2</div>
+                    <div class="stat-label">Average Rating</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        0.3 from last month
+                    </div>
+                </div>
+                 </div>
+            </div>
+
+            <!-- Sentiment Analysis Chart -->
+            <div class="sentiment-panel mt-5">
+                <div class="sentiment-header">
+                    <h2 class="sentiment-title">Review Sentiment Analysis</h2>
+                    <div class="chart-filters">
+                        <button class="filter-btn active">This Month</button>
+                        <button class="filter-btn">Last 3 Months</button>
+                        <button class="filter-btn">This Year</button>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="sentimentChart" width="1408" height="375" style="height: 300px;"></canvas>
+                </div>
+            </div>
+
+            <!-- Reviews Header -->
+            <div class="reviews-header">
+                <div class="reviews-filters">
+                    
+                </div>
+                <button class="btn-primary" data-bs-toggle="modal" data-bs-target="#reviewSettingsModal">
+                    <i class="fas fa-cog me-2"></i>
+                    Review Settings
+                </button>
+            </div>
+
+            <!-- Bulk Actions (hidden by default) -->
+            <div class="bulk-actions" id="bulkActions">
+                <div class="bulk-text">
+                    <span id="selectedCount">0</span> reviews selected
+                </div>
+                <div class="bulk-buttons">
+                    <button class="btn btn-success btn-sm">
+                        <i class="fas fa-check me-1"></i>
+                        Approve All
+                    </button>
+                    <button class="btn btn-danger btn-sm">
+                        <i class="fas fa-times me-1"></i>
+                        Reject All
+                    </button>
+                    <button class="btn btn-secondary btn-sm">
+                        <i class="fas fa-trash me-1"></i>
+                        Delete All
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reviews Grid -->
+            <div class="reviews-grid" id="reviewsGrid">
+                <div class="review-card">
+                    <div class="sentiment-indicator sentiment-positive" title="Positive Sentiment"></div>
+                    <div class="review-header">
+                        <div class="review-user">
+                            <div class="user-avatar-review">AS</div>
+                            <div class="user-info">
+                                <div class="user-name">Alice Smith</div>
+                                <div class="review-meta">Verified User • 2 days ago</div>
+                            </div>
+                        </div>
+                        <div class="review-actions">
+                            <button class="action-btn approve" title="Approve Review">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="action-btn edit" title="Edit Review">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn reject" title="Reject Review">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="review-content">
+                        <div class="content-info">
+                            <img src="assets/images/Spider-Man.jpg" alt="Content" class="content-thumbnail">
+                            <div class="content-details">
+                                <h6>Spider-Man: No Way Home</h6>
+                                <small>Action, Adventure • 2021</small>
+                            </div>
+                        </div>
+                        
+                        <div class="review-rating">
+                            <div class="stars">
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                            </div>
+                            <span class="rating-text">5.0</span>
+                        </div>
+                        
+                        <div class="review-text">
+                            "Absolutely incredible! This movie exceeded all my expectations. The storyline was phenomenal, the acting was top-notch, and the special effects were mind-blowing. Tom Holland delivered an outstanding performance, and seeing all three Spider-Men together was a dream come true. This is definitely a must-watch for any Marvel fan!"
+                        </div>
+                    </div>
+                    
+                    <div class="review-footer">
+                        <div class="review-status">
+                            <span class="status-badge status-approved">Approved</span>
+                        </div>
+                        <div class="review-stats-small">
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span>42</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-reply"></i>
+                                <span>8</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-flag"></i>
+                                <span>0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="sentiment-indicator sentiment-negative" title="Negative Sentiment"></div>
+                    <div class="review-header">
+                        <div class="review-user">
+                            <div class="user-avatar-review" style="background: linear-gradient(135deg, #ef4444, #dc2626);">BJ</div>
+                            <div class="user-info">
+                                <div class="user-name">Bob Johnson</div>
+                                <div class="review-meta">Premium User • 1 week ago</div>
+                            </div>
+                        </div>
+                        <div class="review-actions">
+                            <button class="action-btn approve" title="Approve Review">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="action-btn edit" title="Edit Review">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn reject" title="Reject Review">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="review-content">
+                        <div class="content-info">
+                            <img src="assets/images/The-Dark-Knight.jpg" alt="Content" class="content-thumbnail">
+                            <div class="content-details">
+                                <h6>The Batman</h6>
+                                <small>Action, Crime • 2022</small>
+                            </div>
+                        </div>
+                        
+                        <div class="review-rating">
+                            <div class="stars">
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                            </div>
+                            <span class="rating-text">2.0</span>
+                        </div>
+                        
+                        <div class="review-text">
+                            "I was really looking forward to this movie, but it was quite disappointing. The pacing was too slow, and the movie felt unnecessarily long at nearly 3 hours. While Robert Pattinson's performance was decent, the overall story felt convoluted and lacked the excitement I expected from a Batman film."
+                        </div>
+                    </div>
+                    
+                    <div class="review-footer">
+                        <div class="review-status">
+                            <span class="status-badge status-approved">Approved</span>
+                        </div>
+                        <div class="review-stats-small">
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span>12</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-reply"></i>
+                                <span>15</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-flag"></i>
+                                <span>2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="sentiment-indicator sentiment-neutral" title="Neutral Sentiment"></div>
+                    <div class="review-header">
+                        <div class="review-user">
+                            <div class="user-avatar-review" style="background: linear-gradient(135deg, #10b981, #059669);">CD</div>
+                            <div class="user-info">
+                                <div class="user-name">Carol Davis</div>
+                                <div class="review-meta">New User • 3 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="review-actions">
+                            <button class="action-btn approve" title="Approve Review">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="action-btn edit" title="Edit Review">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn reject" title="Reject Review">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="review-content">
+                        <div class="content-info">
+                            <img src="assets/images/Top-Gun-Maverick.webp" alt="Content" class="content-thumbnail">
+                            <div class="content-details">
+                                <h6>Top Gun: Maverick</h6>
+                                <small>Action, Drama • 2022</small>
+                            </div>
+                        </div>
+                        
+                        <div class="review-rating">
+                            <div class="stars">
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star">★</span>
+                            </div>
+                            <span class="rating-text">4.0</span>
+                        </div>
+                        
+                        <div class="review-text">
+                            "A solid sequel that brings back the nostalgia of the original Top Gun. Tom Cruise delivers another great performance, and the aerial sequences are absolutely stunning. The story is predictable but enjoyable. Great cinematography and sound design. Worth watching for fans of the original."
+                        </div>
+                    </div>
+                    
+                    <div class="review-footer">
+                        <div class="review-status">
+                            <span class="status-badge status-pending">Pending Review</span>
+                        </div>
+                        <div class="review-stats-small">
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span>0</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-reply"></i>
+                                <span>0</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-flag"></i>
+                                <span>0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="sentiment-indicator sentiment-positive" title="Positive Sentiment"></div>
+                    <div class="review-header">
+                        <div class="review-user">
+                            <div class="user-avatar-review" style="background: linear-gradient(135deg, #f59e0b, #d97706);">DW</div>
+                            <div class="user-info">
+                                <div class="user-name">David Wilson</div>
+                                <div class="review-meta">Premium User • 5 days ago</div>
+                            </div>
+                        </div>
+                        <div class="review-actions">
+                            <button class="action-btn approve" title="Approve Review">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="action-btn edit" title="Edit Review">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn reject" title="Reject Review">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="review-content">
+                        <div class="content-info">
+                            <img src="assets/images/Avengers-Endgame.jpg" alt="Content" class="content-thumbnail">
+                            <div class="content-details">
+                                <h6>Avengers Endgame</h6>
+                                <small>Crime, Drama • TV Series</small>
+                            </div>
+                        </div>
+                        
+                        <div class="review-rating">
+                            <div class="stars">
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                            </div>
+                            <span class="rating-text">5.0</span>
+                        </div>
+                        
+                        <div class="review-text">
+                            "One of the greatest TV series ever made! The character development throughout the seasons is absolutely phenomenal. Bryan Cranston's transformation from a mild-mannered teacher to a ruthless drug lord is masterfully portrayed. Every episode keeps you on the edge of your seat. Highly recommended!"
+                        </div>
+                    </div>
+                    
+                    <div class="review-footer">
+                        <div class="review-status">
+                            <span class="status-badge status-approved">Approved</span>
+                        </div>
+                        <div class="review-stats-small">
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span>89</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-reply"></i>
+                                <span>23</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-flag"></i>
+                                <span>0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="sentiment-indicator sentiment-negative" title="Negative Sentiment"></div>
+                    <div class="review-header">
+                        <div class="review-user">
+                            <div class="user-avatar-review" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">EM</div>
+                            <div class="user-info">
+                                <div class="user-name">Emma Martinez</div>
+                                <div class="review-meta">Flagged by system • 1 day ago</div>
+                            </div>
+                        </div>
+                        <div class="review-actions">
+                            <button class="action-btn approve" title="Approve Review">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="action-btn edit" title="Edit Review">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn reject" title="Reject Review">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="review-content">
+                        <div class="content-info">
+                            <img src="assets/images/Dune.jpg" alt="Content" class="content-thumbnail">
+                            <div class="content-details">
+                                <h6>Dune</h6>
+                                <small>Sci-Fi, Adventure • 2021</small>
+                            </div>
+                        </div>
+                        
+                        <div class="review-rating">
+                            <div class="stars">
+                                <span class="star filled">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                            </div>
+                            <span class="rating-text">1.0</span>
+                        </div>
+                        
+                        <div class="review-text">
+                            "This movie was terrible and boring. I couldn't even finish watching it. The plot was confusing and the pacing was awful. Complete waste of time and money. I want my subscription fee back! This platform needs better quality control for their content."
+                        </div>
+                    </div>
+                    
+                    <div class="review-footer">
+                        <div class="review-status">
+                            <span class="status-badge status-rejected">Needs Review</span>
+                        </div>
+                        <div class="review-stats-small">
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span>3</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-reply"></i>
+                                <span>1</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-flag"></i>
+                                <span>7</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <div class="text-center mt-4">
+                <button class="btn-outline load-more">
+                    <i class="fas fa-spinner me-2"></i>
+                    Load More Reviews
+                </button>
+            </div>
+        </div>
+            </div>
+            <!-- Footer -->
+            <div class="footer text-center shadow-sm py-3 mt-5">
+                <p class="m-0">Copyright © 2025. All Rights Reserved. <a href="https://www.templaterise.com/" class="text-primary" target="_blank" >Themes By TemplateRise</a></p>
+            </div>
+        </div>
+    </div>
+
+        <div class="modal fade" id="reviewSettingsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Review Management Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Auto-Approve Reviews</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="autoApprove" checked>
+                                    <label class="form-check-label" for="autoApprove">
+                                        Automatically approve reviews from verified users
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Profanity Filter</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="profanityFilter" checked>
+                                    <label class="form-check-label" for="profanityFilter">
+                                        Enable automatic profanity detection
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Minimum Review Length</label>
+                                <input type="number" class="form-control" value="10" min="1">
+                                <small class="form-text text-muted">Minimum number of characters required</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Sentiment Analysis</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="sentimentAnalysis" checked>
+                                    <label class="form-check-label" for="sentimentAnalysis">
+                                        Enable AI-powered sentiment analysis
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Review Notifications</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="reviewNotifications">
+                                    <label class="form-check-label" for="reviewNotifications">
+                                        Email notifications for new reviews
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="moderationLevel" class="form-label">Moderation Level</label>
+                                <select class="form-control" id="moderationLevel">
+                                    <option value="low">Low - Basic filtering</option>
+                                    <option value="medium" selected>Medium - Standard moderation</option>
+                                    <option value="high">High - Strict moderation</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Scripts -->
+    <script  src="./assets/js/jquery-3.6.0.min.js"></script>
+    <script  src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script  src="./assets/plugin/chart/chart.js"></script>
+    <script  src="./assets/js/chart.js"></script>
+    <script  src="./assets/js/main.js"></script>
+    <script  src="./assets/js/movie.js"></script>
+</body>
+</html>

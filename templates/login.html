@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'icons/fontawesome/css/fontawesome.min.css' %}" rel="stylesheet">
+        <link href="{% static 'icons/fontawesome/css/brands.min.css' %}" rel="stylesheet">
+        <link href="{% static 'icons/fontawesome/css/solid.min.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+    </head>
+
+    <body class="auth-body">
+        <div class="floating-elements">
+            <i class="fas fa-film floating-icon"></i>
+            <i class="fas fa-video floating-icon"></i>
+            <i class="fas fa-play floating-icon"></i>
+            <i class="fas fa-tv floating-icon"></i>
+        </div>
+        <div class="login-container">
+            <div class="login-card">
+
+                <div class="logo text-center mb-5">
+                    <a href="login.html"><img src="{% static 'images/logo.png' %}" class="large-logo-img"
+                            alt="logo large"></a>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                        <label for="email"><i class="fas fa-envelope me-2"></i>Email Address</label>
+                    </div>
+
+                    <div class="form-floating password-field mb-3">
+                        <input type="password" class="form-control" id="password" placeholder="Password" required>
+                        <label for="password"><i class="fas fa-lock me-2"></i>Password</label>
+                        <button type="button" class="password-toggle">
+                            <i class="fas fa-eye" id="passwordIcon"></i>
+                        </button>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">
+                                Remember me
+                            </label>
+                        </div>
+                        <a href="forgotpassword.html" class="forgot-password">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-login w-100 mb-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </button>
+                </form>
+                <div class="signup-link">
+                    <p class="text-muted mb-0">Don't have an account? <a href="signup.html">Sign up now</a></p>
+                </div>
+            </div>
+        </div>
+
+        <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'js/main.js' %} "></script>
+    </body>
+
+</html>

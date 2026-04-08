@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VidManage – Video Streaming Management Dashboard Template (Free)</title>
+    <!-- Stylesheets -->
+    <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./assets/icons/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+    <link href="./assets/icons/fontawesome/css/brands.min.css" rel="stylesheet">
+    <link href="./assets/icons/fontawesome/css/solid.min.css" rel="stylesheet">
+    <link href="./assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+    <!-- Main Wrapper -->
+    <div id="main-wrapper" class="d-flex">
+        <div class="sidebar">
+                <!-- Sidebar -->
+               <div class="sidebar-header">
+                   <div class="lg-logo"><a href="index.html"><img src="./assets/images/logo.png" class="large-logo-img" alt="logo large"></a></div>
+                   <div class="sm-logo"><a href="index.html"><img src="./assets/images/small-logo.png" class="small-logo-img" alt="logo small"></a></div>
+               </div>
+               <div class="sidebar-body  custom-scrollbar">
+                    <ul class="sidebar-menu">
+                        <li class="sidebar-label">Main</li>
+                        <li><a href="index.html" class="sidebar-link"><i class="fa-solid fa-house"></i><p>Dashboard</p></a></li>
+                        <li><a href="analytics.html" class="sidebar-link"><i class="fa-solid fa-chart-line"></i><p>Analytics</p></a></li>
+                        <li class="sidebar-label mt-4">Content</li>
+                        <li><a href="movie.html" class="sidebar-link"><i class="fa-solid fa-film"></i><p>Movies <span class="badge bg-primary ms-auto">1,247</span></p></a></li>
+                        <li><a href="tv-show.html" class="sidebar-link active"><i class="fa-solid fa-tv"></i><p>TV Shows</p></a></li>
+                        <li><a href="genres.html" class="sidebar-link"><i class="fa-solid fa-tags"></i><p>Genres</p></a></li>
+                        <li><a href="reviews.html" class="sidebar-link"><i class="fa-solid fa-star"></i><p>Reviews</p></a></li>
+                        <li class="sidebar-label mt-4">Users</li>
+                        <li><a href="users.html" class="sidebar-link"><i class="fa-solid fa-users"></i><p>All Users</p></a></li>
+                        <li><a href="admins.html" class="sidebar-link"><i class="fa-solid fa-user-shield"></i><p>Admins</p></a></li>
+                        <li class="sidebar-label mt-4">System</li>
+                        <li><a href="setting.html" class="sidebar-link"><i class="fa-solid fa-cog"></i><p>Settings</p></a></li>
+                        <li><a href="security.html" class="sidebar-link"><i class="fa-solid fa-shield-alt"></i><p>Security</p></a></li>
+                        <li class="sidebar-label mt-4">Pages</li>
+                        <li><a href="login.html" class="sidebar-link"><i class="fa-solid fa-user"></i><p>Login</p></a></li>
+                        <li><a href="signup.html" class="sidebar-link"><i class="fa-solid fa-user-plus"></i><p>Signup</p></a></li>
+                        <li><a href="forgotpassword.html" class="sidebar-link"><i class="fa-solid fa-unlock"></i><p>Forgot password</p></a></li>
+                        <li><a href="404.html" class="sidebar-link"><i class="fa-solid fa-exclamation"></i><p>404</p></a></li>
+                        <li><a href="500.html" class="sidebar-link"><i class="fa-solid fa-triangle-exclamation"></i><p>500</p></a></li>
+                    
+                    </ul>
+               </div>
+        </div>
+
+
+         <!-- Header -->
+         <div class="header d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+              <div class="menu-toggle me-3 d-block d-lg-none text-color-1"><span><i class="fa-solid fa-bars font-size-24"></i></span></div>
+              <div class="d-none d-md-block d-lg-block">
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Search anything..." >
+                    </div>
+              </div>
+          </div>
+          <div class="d-flex align-items-center">
+              <ul class="nav d-flex align-items-center">
+                  <!-- Messages Dropdown -->
+                  <li class="nav-item me-4">
+                      <a href="#" class="text-color-1 position-relative header-nav-item"  role="button" 
+                        data-bs-toggle="dropdown" 
+                        data-bs-offset="0,0" 
+                        aria-expanded="false">
+                       <i class="fa-solid fa-envelope fa-lg"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-end mt-4">
+                          <div id="chatmessage" class="h-380 scroll-y p-3 custom-scrollbar">
+                              <!-- Chat Timeline -->
+                              <ul class="timeline">
+                                  <!-- Item 1 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-1.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">We talked about a project...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> 30 min ago</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <!-- Item 2 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-2.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">You sent an email to the client...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> 1 hour ago</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <!-- Item 3 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-3.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Meeting with the design team...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> 2 hours ago</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <!-- Item 4 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-4.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Reviewed the project documents...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> Yesterday</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <!-- Item 5 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-5.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Finalized the project timeline...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> 2 days ago</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                              </ul>
+                          </div>
+                          <a class="all-notification" href="#">See all message <i class="fas fa-arrow-right"></i></a>
+                      </div>
+                  </li>
+                  <!-- Notifications Dropdown -->
+                  <li class="nav-item me-4">
+                      <a href="#" class="text-color-1 notification header-nav-item" 
+                          role="button" 
+                          data-bs-toggle="dropdown" 
+                          data-bs-offset="0,0" 
+                          aria-expanded="false">
+                          <i class="fa-regular fa-bell fa-lg"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-end mt-4">
+                          <div id="Notification" class="h-380 scroll-y p-3 custom-scrollbar">
+                              <!-- Notifications Timeline -->
+                              <ul class="timeline">
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/profile.png">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Dr Smith uploaded a new report</h6>
+                                              <small class="d-block">10 December 2023 - 08:15 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2 media-info">
+                                              AP
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">New Appointment Scheduled</h6>
+                                              <small class="d-block">10 December 2023 - 09:45 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2 media-success">
+                                              <i class="fa fa-check-circle"></i>
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Patient checked in at reception</h6>
+                                              <small class="d-block">10 December 2023 - 10:20 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/profile.png">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Dr Alice shared a prescription</h6>
+                                              <small class="d-block">10 December 2023 - 11:00 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2 media-danger">
+                                              EM
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Emergency Alert: Critical Patient</h6>
+                                              <small class="d-block">10 December 2023 - 11:30 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2 media-primary">
+                                              <i class="fa fa-calendar-alt"></i>
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Next Appointment Reminder</h6>
+                                              <small class="d-block">10 December 2023 - 12:00 PM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                              </ul>
+                              
+                          </div>
+                          <a class="all-notification" href="#">See all notifications <i class="fas fa-arrow-right"></i></a>
+                      </div>
+                  </li>
+                  <li class="nav-item me-4" id="themeToggle">
+                     <span class="header-nav-item sun-icon">
+                         <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 20 20">
+                             <path fill-rule="evenodd"  d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                         </svg>
+                     </span>
+                     <span class="moon-icon header-nav-item d-none">
+                         <svg fill="currentColor" width="20px" height="20px"  viewBox="0 0 20 20">
+                             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                         </svg>
+                     </span>
+                  </li>
+                   <!-- User Profile -->
+                  <li class="nav-item dropdown user-profile">
+                      <div class="d-flex align-items-center dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                          <img src="./assets/images/avatar-6.png" class="user-avatar" alt="">
+                          <div>
+                              <ul class="dropdown-menu mt-3">
+                                <li><a class="dropdown-item py-2" href="profile.html"><i class="fa-solid fa-user me-2 text-success"></i>Profile</a></li>
+                                <li><a class="dropdown-item py-2" href="#"><i class="fa-solid fa-gear me-2 text-info"></i>Setting</a></li>
+                                <li><a class="dropdown-item py-2" href="#"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i>Logout</a></li>
+                            </ul>
+                          </div>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+       </div>
+       <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Main Content -->
+            <div class="main-content">
+                    <div class="page-content">
+        <!-- TV Show Hero Section -->
+        <div class="movie-hero">
+            <div class="hero-content">
+                <div class="hero-poster">
+                    <img src="assets/images/breaking-bad.jpg" alt="Breaking Bad" class="poster-image">
+                </div>
+                
+                <div class="hero-info">
+                    <h1 class="movie-title">Breaking Bad</h1>
+                    <p class="movie-tagline">"Remember my name"</p>
+                    
+                    <div class="movie-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar meta-icon"></i>
+                            <span>2008-2013</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-clock meta-icon"></i>
+                            <span>47 min/episode</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-tv meta-icon"></i>
+                            <span>5 Seasons</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-list meta-icon"></i>
+                            <span>62 Episodes</span>
+                        </div>
+                        <div class="rating-display">
+                            <div class="stars">
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                                <span class="star">★</span>
+                            </div>
+                            <span>9.5/10</span>
+                        </div>
+                    </div>
+                    
+                        <div class="genres">
+                            <span class="genre-tag">Action</span>
+                            <span class="genre-tag">Adventure</span>
+                            <span class="genre-tag">Sci-Fi</span>
+                        </div>
+                    
+                    <p class="movie-description">
+                        A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine in order to secure his family's future. The series follows Walter White's transformation from a mild-mannered teacher to a ruthless drug lord, exploring the consequences of his choices on his family and associates.
+                    </p>
+                    
+                    <div class="action-buttons">
+                        <a href="tvshow-add.html" class="btn-primary">
+                            <i class="fas fa-edit"></i>
+                            Edit TV Show
+                        </a>
+                        <button class="btn-secondary">
+                            <i class="fas fa-plus"></i>
+                            Add Episode
+                        </button>
+                        <button class="btn-danger">
+                            <i class="fas fa-trash"></i>
+                            Delete Show
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics (same as movie details but with TV show specific metrics) -->
+        <div class="stats-grid">
+            <div class="stat-card views">
+                <div class="stat-icon primary">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <div class="stat-value">2.1M</div>
+                <div class="stat-label">Total Views</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    18.3% this month
+                </div>
+            </div>
+            
+            <div class="stat-card revenue">
+                <div class="stat-icon success">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-value">$45.2K</div>
+                <div class="stat-label">Revenue Generated</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    12.7% this month
+                </div>
+            </div>
+            
+            <div class="stat-card rating">
+                <div class="stat-icon warning">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-value">1,247</div>
+                <div class="stat-label">User Reviews</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    89 new reviews
+                </div>
+            </div>
+            
+            <div class="stat-card downloads">
+                <div class="stat-icon danger">
+                    <i class="fas fa-download"></i>
+                </div>
+                <div class="stat-value">89K</div>
+                <div class="stat-label">Episode Downloads</div>
+                <div class="stat-change negative">
+                    <i class="fas fa-arrow-down"></i>
+                    3.2% this month
+                </div>
+            </div>
+        </div>
+
+        <!-- Episodes Section -->
+        <div class="episodes-section">
+            <div class="episodes-header">
+                <h2 class="episodes-title">Season 1 Episodes</h2>
+                <button class="btn-primary">
+                    <i class="fas fa-plus me-2"></i>
+                    Add Episode
+                </button>
+            </div>
+            
+            <div class="episodes-grid">
+                <div class="episode-card">
+                    <div class="episode-thumbnail" style="background-image: url('assets/images/breaking-bad.jpg');">
+                        <div class="episode-number">E01</div>
+                        <div class="episode-duration">58:00</div>
+                    </div>
+                    <div class="episode-info">
+                        <a href="tvshow-details.html">
+                            <h4 class="episode-title">Pilot</h4>
+                        </a>
+                        <p class="episode-description">
+                            Walter White, a struggling high school chemistry teacher, is diagnosed with lung cancer. To secure his family's financial future, he teams up with a former student to manufacture methamphetamine.
+                        </p>
+                        <div class="episode-meta">
+                            <span>Jan 20, 2008</span>
+                            <div class="episode-rating">
+                                <span class="star">★</span>
+                                <span>8.2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="episode-card">
+                    <div class="episode-thumbnail" style="background-image: url('assets/images/breaking-bad.jpg');">
+                        <div class="episode-number">E02</div>
+                        <div class="episode-duration">48:00</div>
+                    </div>
+                    <div class="episode-info">
+                        <a href="tvshow-details.html">
+                            <h4 class="episode-title">Cat's in the Bag...</h4>
+                        </a>
+                        <p class="episode-description">
+                            Walter and Jesse attempt to tie up loose ends. The situation becomes more complicated as they decide what to do with their captive, Krazy-8.
+                        </p>
+                        <div class="episode-meta">
+                            <span>Jan 27, 2008</span>
+                            <div class="episode-rating">
+                                <span class="star">★</span>
+                                <span>8.3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="episode-card">
+                    <div class="episode-thumbnail" style="background-image: url('assets/images/breaking-bad.jpg');">
+                        <div class="episode-number">E03</div>
+                        <div class="episode-duration">48:00</div>
+                    </div>
+                    <div class="episode-info">
+                        <a href="tvshow-details.html">
+                            <h4 class="episode-title">...And the Bag's in the River</h4>
+                        </a>
+                        <p class="episode-description">
+                            Walter deals with the remains of Emilio and faces a difficult decision about Krazy-8. Meanwhile, Skyler grows suspicious of Walter's activities.
+                        </p>
+                        <div class="episode-meta">
+                            <span>Feb 10, 2008</span>
+                            <div class="episode-rating">
+                                <span class="star">★</span>
+                                <span>8.5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="episode-card">
+                    <div class="episode-thumbnail" style="background-image: url('assets/images/breaking-bad.jpg');">
+                        <div class="episode-number">E04</div>
+                        <div class="episode-duration">48:00</div>
+                    </div>
+                    <div class="episode-info">
+                        <a href="tvshow-details.html">
+                            <h4 class="episode-title">Cancer Man</h4>
+                        </a>
+                        <p class="episode-description">
+                            Walter tells the family about his cancer diagnosis. Jesse tries to make amends with his parents. Hank offers to take Walter on a ride-along.
+                        </p>
+                        <div class="episode-meta">
+                            <span>Feb 17, 2008</span>
+                            <div class="episode-rating">
+                                <span class="star">★</span>
+                                <span>8.1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="episode-card">
+                    <div class="episode-thumbnail" style="background-image: url('assets/images/breaking-bad.jpg');">
+                        <div class="episode-number">E05</div>
+                        <div class="episode-duration">47:00</div>
+                    </div>
+                    <div class="episode-info">
+                        <a href="tvshow-details.html">
+                            <h4 class="episode-title">Gray Matter</h4>
+                        </a>
+                        <p class="episode-description">
+                            Walter's former business partners offer to pay for his treatment, but Walter's pride gets in the way. Jesse's attempt to expand their territory backfires.
+                        </p>
+                        <div class="episode-meta">
+                            <span>Feb 24, 2008</span>
+                            <div class="episode-rating">
+                                <span class="star">★</span>
+                                <span>8.3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="episode-card">
+                    <div class="episode-thumbnail" style="background-image: url('assets/images/breaking-bad.jpg');">
+                        <div class="episode-number">E06</div>
+                        <div class="episode-duration">47:00</div>
+                    </div>
+                    <div class="episode-info">
+                        <a href="tvshow-details.html">
+                            <h4 class="episode-title">Crazy Handful of Nothin'</h4>
+                        </a>
+                        <p class="episode-description">
+                            Walter adopts a new identity to deal with Tuco. Meanwhile, Hank's investigation gets closer to home, and Skyler confronts Walter about his second cell phone.
+                        </p>
+                        <div class="episode-meta">
+                            <span>Mar 2, 2008</span>
+                            <div class="episode-rating">
+                                <span class="star">★</span>
+                                <span>8.8</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Show Information (similar to movie details) -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-info-circle"></i>
+                    Show Information
+                </h2>
+                <button class="btn-secondary">
+                    <i class="fas fa-edit"></i>
+                    Edit Info
+                </button>
+            </div>
+            <div class="section-content">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Creator</div>
+                        <div class="info-value">Vince Gilligan</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Network</div>
+                        <div class="info-value">AMC</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Executive Producer</div>
+                        <div class="info-value">Vince Gilligan, Mark Johnson</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Production Company</div>
+                        <div class="info-value">High Bridge Productions</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">First Aired</div>
+                        <div class="info-value">January 20, 2008</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Last Aired</div>
+                        <div class="info-value">September 29, 2013</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Total Seasons</div>
+                        <div class="info-value">5</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Total Episodes</div>
+                        <div class="info-value">62</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cast & Crew (same as movie details) -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-users"></i>
+                    Main Cast
+                </h2>
+                <button class="btn-secondary">
+                    <i class="fas fa-user-plus"></i>
+                    Add Cast Member
+                </button>
+            </div>
+            <div class="section-content">
+                <div class="cast-grid">
+                    <div class="cast-member">
+                        <div class="member-avatar">BC</div>
+                        <div class="member-info">
+                            <div class="member-name">Bryan Cranston</div>
+                            <div class="member-role">Walter White</div>
+                        </div>
+                    </div>
+                    
+                    <div class="cast-member">
+                        <div class="member-avatar" style="background: linear-gradient(135deg, #ec4899, #be185d);">AP</div>
+                        <div class="member-info">
+                            <div class="member-name">Aaron Paul</div>
+                            <div class="member-role">Jesse Pinkman</div>
+                        </div>
+                    </div>
+                    
+                    <div class="cast-member">
+                        <div class="member-avatar" style="background: linear-gradient(135deg, #10b981, #059669);">AG</div>
+                        <div class="member-info">
+                            <div class="member-name">Anna Gunn</div>
+                            <div class="member-role">Skyler White</div>
+                        </div>
+                    </div>
+                    
+                    <div class="cast-member">
+                        <div class="member-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">DN</div>
+                        <div class="member-info">
+                            <div class="member-name">Dean Norris</div>
+                            <div class="member-role">Hank Schrader</div>
+                        </div>
+                    </div>
+                    
+                    <div class="cast-member">
+                        <div class="member-avatar" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">BG</div>
+                        <div class="member-info">
+                            <div class="member-name">Betsy Brandt</div>
+                            <div class="member-role">Marie Schrader</div>
+                        </div>
+                    </div>
+                    
+                    <div class="cast-member">
+                        <div class="member-avatar" style="background: linear-gradient(135deg, #ef4444, #dc2626);">RJM</div>
+                        <div class="member-info">
+                            <div class="member-name">RJ Mitte</div>
+                            <div class="member-role">Walter White Jr.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+            </div>
+            <!-- Footer -->
+            <div class="footer text-center shadow-sm py-3 mt-5">
+                <p class="m-0">Copyright © 2025. All Rights Reserved. <a href="https://www.templaterise.com/" class="text-primary" target="_blank" >Themes By TemplateRise</a></p>
+            </div>
+        </div>
+    </div>
+     <!-- Scripts -->
+    <script  src="./assets/js/jquery-3.6.0.min.js"></script>
+    <script  src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script  src="./assets/plugin/chart/chart.js"></script>
+    <script  src="./assets/js/chart.js"></script>
+    <script  src="./assets/js/main.js"></script>
+</body>
+</html>

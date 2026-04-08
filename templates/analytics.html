@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VidManage – Video Streaming Management Dashboard Template (Free)</title>
+    <!-- Stylesheets -->
+    <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./assets/icons/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+    <link href="./assets/icons/fontawesome/css/brands.min.css" rel="stylesheet">
+    <link href="./assets/icons/fontawesome/css/solid.min.css" rel="stylesheet">
+    <link href="./assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+    <!-- Main Wrapper -->
+    <div id="main-wrapper" class="d-flex">
+        <div class="sidebar">
+                <!-- Sidebar -->
+               <div class="sidebar-header">
+                   <div class="lg-logo"><a href="index.html"><img src="./assets/images/logo.png" class="large-logo-img" alt="logo large"></a></div>
+                   <div class="sm-logo"><a href="index.html"><img src="./assets/images/small-logo.png" class="small-logo-img" alt="logo small"></a></div>
+               </div>
+               <div class="sidebar-body  custom-scrollbar">
+                    <ul class="sidebar-menu">
+                        <li class="sidebar-label">Main</li>
+                        <li><a href="index.html" class="sidebar-link"><i class="fa-solid fa-house"></i><p>Dashboard</p></a></li>
+                        <li><a href="analytics.html" class="sidebar-link active"><i class="fa-solid fa-chart-line"></i><p>Analytics</p></a></li>
+                        <li class="sidebar-label mt-4">Content</li>
+                        <li><a href="movie.html" class="sidebar-link"><i class="fa-solid fa-film"></i><p>Movies <span class="badge bg-primary ms-auto">1,247</span></p></a></li>
+                        <li><a href="tv-show.html" class="sidebar-link"><i class="fa-solid fa-tv"></i><p>TV Shows</p></a></li>
+                        <li><a href="genres.html" class="sidebar-link"><i class="fa-solid fa-tags"></i><p>Genres</p></a></li>
+                        <li><a href="reviews.html" class="sidebar-link"><i class="fa-solid fa-star"></i><p>Reviews</p></a></li>
+                        <li class="sidebar-label mt-4">Users</li>
+                        <li><a href="users.html" class="sidebar-link"><i class="fa-solid fa-users"></i><p>All Users</p></a></li>
+                        <li><a href="admins.html" class="sidebar-link"><i class="fa-solid fa-user-shield"></i><p>Admins</p></a></li>
+                        <li class="sidebar-label mt-4">System</li>
+                        <li><a href="setting.html" class="sidebar-link"><i class="fa-solid fa-cog"></i><p>Settings</p></a></li>
+                        <li><a href="security.html" class="sidebar-link"><i class="fa-solid fa-shield-alt"></i><p>Security</p></a></li>
+                        <li class="sidebar-label mt-4">Pages</li>
+                        <li><a href="login.html" class="sidebar-link"><i class="fa-solid fa-user"></i><p>Login</p></a></li>
+                        <li><a href="signup.html" class="sidebar-link"><i class="fa-solid fa-user-plus"></i><p>Signup</p></a></li>
+                        <li><a href="forgotpassword.html" class="sidebar-link"><i class="fa-solid fa-unlock"></i><p>Forgot password</p></a></li>
+                        <li><a href="404.html" class="sidebar-link"><i class="fa-solid fa-exclamation"></i><p>404</p></a></li>
+                        <li><a href="500.html" class="sidebar-link"><i class="fa-solid fa-triangle-exclamation"></i><p>500</p></a></li>
+                    
+                    </ul>
+               </div>
+        </div>
+
+
+         <!-- Header -->
+         <div class="header d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+              <div class="menu-toggle me-3 d-block d-lg-none text-color-1"><span><i class="fa-solid fa-bars font-size-24"></i></span></div>
+              <div class="d-none d-md-block d-lg-block">
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Search anything..." >
+                    </div>
+              </div>
+          </div>
+          <div class="d-flex align-items-center">
+              <ul class="nav d-flex align-items-center">
+                  <!-- Messages Dropdown -->
+                  <li class="nav-item me-4">
+                      <a href="#" class="text-color-1 position-relative header-nav-item"  role="button" 
+                        data-bs-toggle="dropdown" 
+                        data-bs-offset="0,0" 
+                        aria-expanded="false">
+                       <i class="fa-solid fa-envelope fa-lg"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-end mt-4">
+                          <div id="chatmessage" class="h-380 scroll-y p-3 custom-scrollbar">
+                              <!-- Chat Timeline -->
+                              <ul class="timeline">
+                                  <!-- Item 1 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-1.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">We talked about a project...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> 30 min ago</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <!-- Item 2 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-2.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">You sent an email to the client...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> 1 hour ago</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <!-- Item 3 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-3.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Meeting with the design team...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> 2 hours ago</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <!-- Item 4 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-4.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Reviewed the project documents...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> Yesterday</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <!-- Item 5 -->
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/avatar-5.jpg">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Finalized the project timeline...</h6>
+                                              <small class="d-block"><i class="fa-solid fa-clock"></i> 2 days ago</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                              </ul>
+                          </div>
+                          <a class="all-notification" href="#">See all message <i class="fas fa-arrow-right"></i></a>
+                      </div>
+                  </li>
+                  <!-- Notifications Dropdown -->
+                  <li class="nav-item me-4">
+                      <a href="#" class="text-color-1 notification header-nav-item" 
+                          role="button" 
+                          data-bs-toggle="dropdown" 
+                          data-bs-offset="0,0" 
+                          aria-expanded="false">
+                          <i class="fa-regular fa-bell fa-lg"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-end mt-4">
+                          <div id="Notification" class="h-380 scroll-y p-3 custom-scrollbar">
+                              <!-- Notifications Timeline -->
+                              <ul class="timeline">
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/profile.png">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Dr Smith uploaded a new report</h6>
+                                              <small class="d-block">10 December 2023 - 08:15 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2 media-info">
+                                              AP
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">New Appointment Scheduled</h6>
+                                              <small class="d-block">10 December 2023 - 09:45 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2 media-success">
+                                              <i class="fa fa-check-circle"></i>
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Patient checked in at reception</h6>
+                                              <small class="d-block">10 December 2023 - 10:20 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2">
+                                              <img alt="image" width="50" src="./assets/images/profile.png">
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Dr Alice shared a prescription</h6>
+                                              <small class="d-block">10 December 2023 - 11:00 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2 media-danger">
+                                              EM
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Emergency Alert: Critical Patient</h6>
+                                              <small class="d-block">10 December 2023 - 11:30 AM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="timeline-panel">
+                                          <div class="media me-2 media-primary">
+                                              <i class="fa fa-calendar-alt"></i>
+                                          </div>
+                                          <div class="media-body">
+                                              <h6 class="mb-1">Next Appointment Reminder</h6>
+                                              <small class="d-block">10 December 2023 - 12:00 PM</small>
+                                          </div>
+                                      </div>
+                                  </li>
+                              </ul>
+                              
+                          </div>
+                          <a class="all-notification" href="#">See all notifications <i class="fas fa-arrow-right"></i></a>
+                      </div>
+                  </li>
+                  <li class="nav-item me-4" id="themeToggle">
+                     <span class="header-nav-item sun-icon">
+                         <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 20 20">
+                             <path fill-rule="evenodd"  d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                         </svg>
+                     </span>
+                     <span class="moon-icon header-nav-item d-none">
+                         <svg fill="currentColor" width="20px" height="20px"  viewBox="0 0 20 20">
+                             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                         </svg>
+                     </span>
+                  </li>
+                   <!-- User Profile -->
+                  <li class="nav-item dropdown user-profile">
+                      <div class="d-flex align-items-center dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                          <img src="./assets/images/avatar-6.png" class="user-avatar" alt="">
+                          <div>
+                              <ul class="dropdown-menu mt-3">
+                                <li><a class="dropdown-item py-2" href="profile.html"><i class="fa-solid fa-user me-2 text-success"></i>Profile</a></li>
+                                <li><a class="dropdown-item py-2" href="#"><i class="fa-solid fa-gear me-2 text-info"></i>Setting</a></li>
+                                <li><a class="dropdown-item py-2" href="#"><i class="fa-solid fa-right-from-bracket me-2 text-danger"></i>Logout</a></li>
+                            </ul>
+                          </div>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+       </div>
+       <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Main Content -->
+            <div class="main-content">
+                    <div class="page-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Analytics Dashboard</h1>
+                <p class="page-subtitle">Comprehensive insights into your VidManage platform performance</p>
+            </div>
+
+            <!-- Analytics Header -->
+            <div class="analytics-header">
+                <div class="d-flex gap-3">
+                    <button class="btn-outline">
+                        <i class="fas fa-share me-2"></i>
+                        Share Report
+                    </button>
+                    <button class="btn-primary">
+                        <i class="fas fa-download me-2"></i>
+                        Export Data
+                    </button>
+                </div>
+            </div>
+
+            <!-- Real-time Analytics -->
+            <div class="realtime-panel">
+                <div class="realtime-header">
+                    <div class="realtime-indicator"></div>
+                    <h2 class="chart-title">Live Analytics</h2>
+                    <span class="text-muted">Updated every 30 seconds</span>
+                </div>
+                
+                <div class="row realtime-metrics">
+                    <div class="col-md-3 mb-3">
+                        <div class="realtime-metric">
+                            <div class="realtime-value" id="liveViewers">2,855</div>
+                            <div class="realtime-label">Active Viewers</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="realtime-metric">
+                            <div class="realtime-value" id="liveStreams">153</div>
+                            <div class="realtime-label">Concurrent Streams</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="realtime-metric">
+                            <div class="realtime-value" id="liveRevenue">$1,254</div>
+                            <div class="realtime-label">Revenue Today</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="realtime-metric">
+                            <div class="realtime-value" id="liveSignups">22</div>
+                            <div class="realtime-label">New Signups</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Cards -->
+            <div class="row analytics-grid">
+                <div class="col-12 col-md-6 col-lg-3 mb-3">
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <div class="card-icon primary">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                        </div>
+                        <div class="card-value">15.2M</div>
+                        <div class="card-label">Total Views</div>
+                        <div class="card-change change-positive">
+                            <i class="fas fa-arrow-up"></i>
+                            12.5% vs last week
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-3 mb-3">
+                    <div class="analytics-card revenue">
+                        <div class="card-header">
+                            <div class="card-icon success">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                        </div>
+                        <div class="card-value">$89,247</div>
+                        <div class="card-label">Revenue</div>
+                        <div class="card-change change-positive">
+                            <i class="fas fa-arrow-up"></i>
+                            8.3% vs last week
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-3 mb-3">
+                    <div class="analytics-card users">
+                        <div class="card-header">
+                            <div class="card-icon warning">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="card-value">2.4K</div>
+                        <div class="card-label">New Users</div>
+                        <div class="card-change change-positive">
+                            <i class="fas fa-arrow-up"></i>
+                            15.7% vs last week
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-3 mb-3">
+                    <div class="analytics-card content">
+                        <div class="card-header">
+                            <div class="card-icon danger">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                        </div>
+                        <div class="card-value">4.2h</div>
+                        <div class="card-label">Avg. Watch Time</div>
+                        <div class="card-change change-negative">
+                            <i class="fas fa-arrow-down"></i>
+                            2.1% vs last week
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Charts Row -->
+            <div class="row mb-4 g-4">
+                <!-- Views Over Time Chart -->
+                <div class="col-lg-8">
+                    <div class="chart-container">
+                        <div class="chart-header d-flex justify-content-between align-items-center">
+                            <h2 class="chart-title">Views Over Time</h2>
+                            <div class="chart-filters">
+                                <button class="filter-btn active">7 Days</button>
+                                <button class="filter-btn">30 Days</button>
+                                <button class="filter-btn">90 Days</button>
+                                <button class="filter-btn">1 Year</button>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="viewsChart"  style="height: 300px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Genres Chart -->
+                <div class="col-lg-4">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h2 class="chart-title">Top Genres</h2>
+                        </div>
+                        <div class="chart-wrapper mt-5">
+                            <canvas id="genresChart" style="height: 300px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue and User Growth Charts -->
+            <div class="row mb-4 g-4">
+                <!-- Revenue Chart -->
+                <div class="col-lg-6">
+                    <div class="chart-container">
+                        <div class="chart-header d-flex justify-content-between align-items-center">
+                            <h2 class="chart-title">Revenue Trends</h2>
+                            <div class="chart-filters">
+                                <button class="filter-btn active">Monthly</button>
+                                <button class="filter-btn">Weekly</button>
+                                <button class="filter-btn">Daily</button>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="revenueChart" style="height: 300px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Growth Chart -->
+                <div class="col-lg-6">
+                    <div class="chart-container">
+                        <div class="chart-header d-flex justify-content-between align-items-center">
+                            <h2 class="chart-title">User Growth</h2>
+                            <div class="chart-filters">
+                                <button class="filter-btn">Free</button>
+                                <button class="filter-btn active">Premium</button>
+                                <button class="filter-btn">All</button>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="userGrowthChart" style="height: 300px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Top Content Performance -->
+            <div class="top-content-table">
+                <div class="table-header">
+                    <h2 class="table-title">Top Performing Content</h2>
+                    <button class="btn-outline">View All</button>
+                </div>
+                
+                <div class="table-wrapper mt-4 p-3">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Content</th>
+                                <th>Views</th>
+                                <th>Watch Time</th>
+                                <th>Revenue</th>
+                                <th>Growth</th>
+                                <th>Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="content-item">
+                                        <img src="assets/images/Spider-Man.jpg" alt="Content" class="content-thumbnail">
+                                        <div class="content-info">
+                                            <h6>Spider-Man: No Way Home</h6>
+                                            <small>Action, Adventure • 2021</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="metric-value">2.4M</td>
+                                <td class="metric-value">847K hrs</td>
+                                <td class="metric-value">$12,480</td>
+                                <td>
+                                    <span class="metric-change positive">+15.2%</span>
+                                </td>
+                                <td class="metric-value">8.4 <i class="fas fa-star text-warning"></i></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="content-item">
+                                        <img src="assets/images/Dune.jpg" alt="Content" class="content-thumbnail">
+                                        <div class="content-info">
+                                            <h6>Dune</h6>
+                                            <small>Sci-Fi, Adventure • 2021</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="metric-value">1.8M</td>
+                                <td class="metric-value">623K hrs</td>
+                                <td class="metric-value">$9,240</td>
+                                <td>
+                                    <span class="metric-change positive">+8.7%</span>
+                                </td>
+                                <td class="metric-value">8.0 <i class="fas fa-star text-warning"></i></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="content-item">
+                                        <img src="assets/images/Top-Gun-Maverick.webp" alt="Content" class="content-thumbnail">
+                                        <div class="content-info">
+                                            <h6>Top Gun: Maverick</h6>
+                                            <small>Action, Drama • 2022</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="metric-value">1.6M</td>
+                                <td class="metric-value">578K hrs</td>
+                                <td class="metric-value">$8,920</td>
+                                <td>
+                                    <span class="metric-change positive">+12.3%</span>
+                                </td>
+                                <td class="metric-value">8.7 <i class="fas fa-star text-warning"></i></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="content-item">
+                                        <img src="assets/images/Avengers-Endgame.jpg" alt="Content" class="content-thumbnail">
+                                        <div class="content-info">
+                                            <h6>Avengers Endgame</h6>
+                                            <small>Crime, Drama • TV Series</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="metric-value">1.2M</td>
+                                <td class="metric-value">892K hrs</td>
+                                <td class="metric-value">$7,650</td>
+                                <td>
+                                    <span class="metric-change negative">-2.1%</span>
+                                </td>
+                                <td class="metric-value">9.5 <i class="fas fa-star text-warning"></i></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="content-item">
+                                        <img src="assets/images/The-Dark-Knight.jpg" alt="Content" class="content-thumbnail">
+                                        <div class="content-info">
+                                            <h6>The Batman</h6>
+                                            <small>Action, Crime • 2022</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="metric-value">980K</td>
+                                <td class="metric-value">423K hrs</td>
+                                <td class="metric-value">$6,780</td>
+                                <td>
+                                    <span class="metric-change positive">+5.8%</span>
+                                </td>
+                                <td class="metric-value">7.8 <i class="fas fa-star text-warning"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+                <!-- Geographic Distribution and Device Analytics -->
+                <div class="row mb-4 g-4">
+                    <div class="col-lg-6">
+                        <!-- Geographic Distribution -->
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h2 class="chart-title">Geographic Distribution</h2>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="geoChart" style="height: 300px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                            <!-- Device Analytics -->
+                            <div class="chart-container">
+                                <div class="chart-header">
+                                    <h2 class="chart-title">Device Usage</h2>
+                                </div>
+                                <div class="chart-wrapper">
+                                    <canvas id="deviceChart" style="height: 300px;"></canvas>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <!-- Footer -->
+            <div class="footer text-center shadow-sm py-3 mt-5">
+                <p class="m-0">Copyright © 2025. All Rights Reserved. <a href="https://www.templaterise.com/" class="text-primary" target="_blank" >Themes By TemplateRise</a></p>
+            </div>
+        </div>
+    </div>
+     <!-- Scripts -->
+    <script  src="./assets/js/jquery-3.6.0.min.js"></script>
+    <script  src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script  src="./assets/plugin/chart/chart.js"></script>
+    <script  src="./assets/js/chart.js"></script>
+    <script  src="./assets/js/main.js"></script>
+    <script  src="./assets/js/movie.js"></script>
+</body>
+</html>
