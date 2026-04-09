@@ -17,4 +17,5 @@ urlpatterns = [
     path('analytics/', views.analytics, name='analytics'),
     path('users/', views.users, name='users'),
     path('drone_api/', views.drone_control, name='drone_control'),
+    path('forgot-password/', views.forgot_password, name='forgot_password'),
 ]

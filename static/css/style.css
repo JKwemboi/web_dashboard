@@ -5995,3 +5995,31 @@ body {
   font-size: 20px;
   border-radius: 12px;
 }
+
+.live-feed-box {
+  background: black;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #1e293b;
+}
+
+#videoFeed {
+  height: 400px;
+  object-fit: cover;
+}
+
+.control-btn {
+  width: 65px;
+  height: 65px;
+  margin: 5px;
+  font-size: 22px;
+  border-radius: 12px;
+}
+
+.status-box {
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 10px;
+}

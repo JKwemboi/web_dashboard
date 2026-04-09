@@ -1,3 +1,4 @@
+import cv2
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
@@ -70,7 +71,21 @@ def logout(request):
 
 
 def video_feed(request):
-    return StreamingHttpResponse(gen_frames(),
+    cap = cv2.VideoCapture(0)  # or drone stream URL
+
+    def generate():
+        while True:
+            success, frame = cap.read()
+            if not success:
+                break
+
+            _, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+    return StreamingHttpResponse(generate(),
                                  content_type='multipart/x-mixed-replace; boundary=frame')
 
 
@@ -85,6 +100,7 @@ def settings(request):
 def map_view(request):
     return render(request, 'map.html', {'user': request.user})
 
+
 def drone_control(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -93,6 +109,7 @@ def drone_control(request):
         print("Drone Command:", command)
 
         return JsonResponse({"status": "ok"})
+
 
 def drone_control_page(request):
     return render(request, 'drone_control.html', {'user': request.user})
@@ -112,3 +129,14 @@ def analytics(request):
 
 def users(request):
     return render(request, 'users.html', {'user': request.user})
+
+
+def forgot_password(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        # Here you would typically handle the password reset logic,
+        # such as sending a reset link to the user's email.
+        messages.success(request, 'Password reset link sent to your email.')
+        return redirect('login')
+    else:
+        return render(request, 'forgotpassword.html')

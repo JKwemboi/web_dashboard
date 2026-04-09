@@ -51,56 +51,56 @@
 
         <div class="container control-container">
 
-            <div class="card p-4">
-                <h3 class="mb-4 text-center">🚁 Drone Control Panel</h3>
+            <div class="container control-container">
 
-                <div class="row">
+                <div class="card p-4">
+                    <h3 class="mb-4 text-center">🚁 Drone Control & Live Feed</h3>
 
-                    <!-- CONTROLS -->
-                    <div class="col-md-6 text-center">
+                    <div class="row">
 
-                        <h5 textcolor="white">Movement</h5>
+                        <!-- LEFT: LIVE VIDEO -->
+                        <div class="col-md-7">
+                            <h5>📡 Live Feed</h5>
 
-                        <button class="btn btn-success control-btn" onclick="sendCommand('up')">↑</button>
+                            <div class="live-feed-box">
+                                <img src="/video_feed" id="videoFeed" class="w-100">
+                            </div>
 
-                        <div>
-                            <button class="btn btn-success control-btn" onclick="sendCommand('left')">←</button>
-                            <button class="btn btn-danger control-btn" onclick="sendCommand('stop')">■</button>
-                            <button class="btn btn-success control-btn" onclick="sendCommand('right')">→</button>
+                            <div class="mt-2 text-end">
+                                <span class="badge bg-success">LIVE</span>
+                            </div>
                         </div>
 
-                        <button class="btn btn-success control-btn" onclick="sendCommand('down')">↓</button>
+                        <!-- RIGHT: CONTROLS -->
+                        <div class="col-md-5 text-center">
 
-                        <div class="mt-4">
-                            <button class="btn btn-primary me-2" onclick="sendCommand('takeoff')">Take Off</button>
-                            <button class="btn btn-warning" onclick="sendCommand('land')">Land</button>
+                            <h5>🎮 Controls</h5>
+
+                            <!-- UP -->
+                            <button class="btn btn-success control-btn" onclick="sendCommand('up')">↑</button>
+
+                            <div>
+                                <button class="btn btn-success control-btn" onclick="sendCommand('left')">←</button>
+                                <button class="btn btn-danger control-btn" onclick="sendCommand('stop')">■</button>
+                                <button class="btn btn-success control-btn" onclick="sendCommand('right')">→</button>
+                            </div>
+
+                            <button class="btn btn-success control-btn" onclick="sendCommand('down')">↓</button>
+
+                            <div class="mt-4">
+                                <button class="btn btn-primary me-2" onclick="sendCommand('takeoff')">Take Off</button>
+                                <button class="btn btn-warning" onclick="sendCommand('land')">Land</button>
+                            </div>
+
+                            <hr>
+
+                            <!-- STATUS -->
+                            <div class="status-box">🔋 Battery: <span id="battery">85%</span></div>
+                            <div class="status-box">📡 Signal: <span id="signal">Strong</span></div>
+
                         </div>
 
                     </div>
-
-                    <!-- STATUS -->
-                    <div class="col-md-6">
-
-                        <h5>Status</h5>
-
-                        <div class="status-box">📡 Signal: <strong id="signal">Strong</strong></div>
-                        <div class="status-box">🔋 Battery: <strong id="battery">85%</strong></div>
-                        <div class="status-box">📏 Altitude: <strong id="altitude">12m</strong></div>
-                        <div class="status-box">🧭 Direction: <strong id="direction">North</strong></div>
-
-                        <hr>
-
-                        <h6>Speed Control</h6>
-                        <input type="range" min="0" max="100" class="form-range" onchange="updateSpeed(this.value)">
-                    </div>
-
-                </div>
-
-                <!-- BACK BUTTON -->
-                <div class="text-center mt-4">
-                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">
-                        ← Back to Dashboard
-                    </a>
                 </div>
 
             </div>
