@@ -10,9 +10,11 @@ urlpatterns = [
     path('logout', views.logout, name='logout'),
     path('video_feed', views.video_feed, name='video_feed'),
     path('map/', views.map_view, name='map'),
-    path('drone-control/', views.drone_control, name='drone_control'),
+    path('drone_control_page/', views.drone_control_page,
+         name='drone_control_page'),
     path('system-status/', views.system_status, name='system_status'),
     path('alerts/', views.alerts, name='alerts'),
     path('analytics/', views.analytics, name='analytics'),
     path('users/', views.users, name='users'),
+    path('drone_api/', views.drone_control, name='drone_control'),
 ]

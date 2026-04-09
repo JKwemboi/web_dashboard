@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
-from django.http import StreamingHttpResponse
+from django.http import StreamingHttpResponse, JsonResponse
 from detection.models import Detection
+import json
+
 # from .camera import gen_frames
 from . import views
 
@@ -83,8 +85,16 @@ def settings(request):
 def map_view(request):
     return render(request, 'map.html', {'user': request.user})
 
-
 def drone_control(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        command = data.get("command")
+
+        print("Drone Command:", command)
+
+        return JsonResponse({"status": "ok"})
+
+def drone_control_page(request):
     return render(request, 'drone_control.html', {'user': request.user})
 
 

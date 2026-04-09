@@ -5988,3 +5988,10 @@ body {
     opacity: 1;
   }
 }
+
+.control-btn {
+  width: 60px;
+  height: 60px;
+  font-size: 20px;
+  border-radius: 12px;
+}
