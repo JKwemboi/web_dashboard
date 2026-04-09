@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    # 'django.contrib.sessions',
+    'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'detection'
@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'web_dashboard.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'dashboard',
+        'USER': 'postgres',
+        'PASSWORD': '124kenya',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 

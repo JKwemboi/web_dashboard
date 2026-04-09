@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>dashboard signup</title>
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'icons/fontawesome/css/fontawesome.min.css' %}" rel="stylesheet">
+        <link href="{% static 'icons/fontawesome/css/brands.min.css' %}" rel="stylesheet">
+        <link href="{% static 'icons/fontawesome/css/solid.min.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+    </head>
+
+    <body class="auth-body">
+        <div class="floating-elements">
+            <i class="fas fa-film floating-icon"></i>
+            <i class="fas fa-video floating-icon"></i>
+            <i class="fas fa-play floating-icon"></i>
+            <i class="fas fa-tv floating-icon"></i>
+        </div>
+        {% block content %}
+        {% endblock %}
+
+        <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'js/main.js' %}  "></script>
+    </body>
+
+</html>

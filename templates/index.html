@@ -5,7 +5,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>VidManage  Video Streaming Management Dashboard Template (Free)</title>
+        <title>web_dashboard</title>
         <!-- Stylesheets -->
         <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
         <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
@@ -13,6 +13,7 @@
         <link href="{% static 'icons/fontawesome/css/brands.min.css' %}" rel="stylesheet">
         <link href="{% static 'icons/fontawesome/css/solid.min.css' %}" rel="stylesheet">
         <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
     </head>
 
     <body>
@@ -30,58 +31,96 @@
                     <div class="sm-logo"><a href="index.html"><img src="{% static 'images/small-logo.png' %}"
                                 class="small-logo-img" alt="logo small"></a></div>
                 </div>
-                <div class="sidebar-body  custom-scrollbar">
+                <div class="sidebar-body custom-scrollbar">
                     <ul class="sidebar-menu">
+
+                        <!-- MAIN -->
                         <li class="sidebar-label">Main</li>
-                        <li><a href="index.html" class="sidebar-link active"><i class="fa-solid fa-house"></i>
+
+                        <li>
+                            <a href="{% url 'dashboard' %}" class="sidebar-link active">
+                                <i class="fa-solid fa-house"></i>
                                 <p>Dashboard</p>
-                            </a></li>
-                        <li><a href="analytics.html" class="sidebar-link"><i class="fa-solid fa-chart-line"></i>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'analytics' %}" class="sidebar-link">
+                                <i class="fa-solid fa-chart-line"></i>
                                 <p>Analytics</p>
-                            </a></li>
-                        <li class="sidebar-label mt-4">Content</li>
-                        <li><a href="movie.html" class="sidebar-link"><i class="fa-solid fa-film"></i>
-                                <p>Movies <span class="badge bg-primary ms-auto">1,247</span></p>
-                            </a></li>
-                        <li><a href="tv-show.html" class="sidebar-link"><i class="fa-solid fa-tv"></i>
-                                <p>TV Shows</p>
-                            </a></li>
-                        <li><a href="genres.html" class="sidebar-link"><i class="fa-solid fa-tags"></i>
-                                <p>Genres</p>
-                            </a></li>
-                        <li><a href="reviews.html" class="sidebar-link"><i class="fa-solid fa-star"></i>
-                                <p>Reviews</p>
-                            </a></li>
+                            </a>
+                        </li>
+
+                        <!-- MONITORING -->
+                        <li class="sidebar-label mt-4">Monitoring</li>
+
+                        <li>
+                            <a href="{% url 'video_feed' %}" class="sidebar-link">
+                                <i class="fa-solid fa-video"></i>
+                                <p>Live Feed</p>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'alerts' %}" class="sidebar-link">
+                                <i class="fa-solid fa-bell"></i>
+                                <p>Alerts
+                                    <span class="badge bg-danger ms-auto">3</span>
+                                </p>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'map' %}" class="sidebar-link">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                                <p>Live Map</p>
+                            </a>
+                        </li>
+
+                        <!-- CONTROL -->
+                        <li class="sidebar-label mt-4">Control</li>
+
+                        <li>
+                            <a href="{% url 'drone_control' %}" class="sidebar-link">
+                                <i class="fa-solid fa-gamepad"></i>
+                                <p>Drone Control</p>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'system_status' %}" class="sidebar-link">
+                                <i class="fa-solid fa-microchip"></i>
+                                <p>System Status</p>
+                            </a>
+                        </li>
+
+                        <!-- USERS -->
                         <li class="sidebar-label mt-4">Users</li>
-                        <li><a href="users.html" class="sidebar-link"><i class="fa-solid fa-users"></i>
+
+                        <li>
+                            <a href="{% url 'users' %}" class="sidebar-link">
+                                <i class="fa-solid fa-users"></i>
                                 <p>All Users</p>
-                            </a></li>
-                        <li><a href="admins.html" class="sidebar-link"><i class="fa-solid fa-user-shield"></i>
-                                <p>Admins</p>
-                            </a></li>
+                            </a>
+                        </li>
+
+                        <!-- SETTINGS -->
                         <li class="sidebar-label mt-4">System</li>
-                        <li><a href="setting.html" class="sidebar-link"><i class="fa-solid fa-cog"></i>
+
+                        <li>
+                            <a href="{% url 'settings' %}" class="sidebar-link">
+                                <i class="fa-solid fa-cog"></i>
                                 <p>Settings</p>
-                            </a></li>
-                        <li><a href="security.html" class="sidebar-link"><i class="fa-solid fa-shield-alt"></i>
-                                <p>Security</p>
-                            </a></li>
-                        <li class="sidebar-label mt-4">Pages</li>
-                        <li><a href="login.html" class="sidebar-link"><i class="fa-solid fa-user"></i>
-                                <p>Login</p>
-                            </a></li>
-                        <li><a href="signup.html" class="sidebar-link"><i class="fa-solid fa-user-plus"></i>
-                                <p>Signup</p>
-                            </a></li>
-                        <li><a href="forgotpassword.html" class="sidebar-link"><i class="fa-solid fa-unlock"></i>
-                                <p>Forgot password</p>
-                            </a></li>
-                        <li><a href="404.html" class="sidebar-link"><i class="fa-solid fa-exclamation"></i>
-                                <p>404</p>
-                            </a></li>
-                        <li><a href="500.html" class="sidebar-link"><i class="fa-solid fa-triangle-exclamation"></i>
-                                <p>500</p>
-                            </a></li>
+                            </a>
+                        </li>
+
+                        <!-- LOGOUT -->
+                        <li>
+                            <a href="{% url 'logout' %}" class="sidebar-link">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <p>Logout</p>
+                            </a>
+                        </li>
 
                     </ul>
                 </div>
@@ -287,21 +326,44 @@
                         </li>
                         <!-- User Profile -->
                         <li class="nav-item dropdown user-profile">
-                            <div class="d-flex align-items-center dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <img src="{% static 'images/avatar-6.png' %}" class="user-avatar" alt="">
-                                <div>
-                                    <ul class="dropdown-menu mt-3">
-                                        <li><a class="dropdown-item py-2" href="profile.html"><i
-                                                    class="fa-solid fa-user me-2 text-success"></i>Profile</a></li>
-                                        <li><a class="dropdown-item py-2" href="#"><i
-                                                    class="fa-solid fa-gear me-2 text-info"></i>Setting</a></li>
-                                        <li><a class="dropdown-item py-2" href="#"><i
-                                                    class="fa-solid fa-right-from-bracket me-2 text-danger"></i>Logout</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+
+                            <!-- CLICKABLE USER AREA -->
+                            <a class="d-flex align-items-center dropdown-toggle text-decoration-none" href="#"
+                                id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                                <!-- USER IMAGE -->
+                                <img src="{% static 'images/avatar-6.png' %}" class="user-avatar me-2" alt="">
+                            </a>
+                            <!-- DROPDOWN MENU -->
+                            <ul class="dropdown-menu dropdown-menu-end mt-3" aria-labelledby="userDropdown">
+
+                                <li>
+                                    <a class="dropdown-item py-2" href="{% url 'profile' %}">
+                                        <i class="fa-solid fa-user me-2 text-success"></i>
+                                        Profile
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item py-2" href="{% url 'settings' %}">
+                                        <i class="fa-solid fa-gear me-2 text-info"></i>
+                                        Settings
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+                                <li>
+                                    <a href="{% url 'logout' %}" class="dropdown-item py-2">
+                                        <i class="fa-solid fa-right-from-bracket me-2 text-danger"></i>
+                                        Logout
+                                    </a>
+                                </li>
+
+                            </ul>
+
                         </li>
                     </ul>
                 </div>
@@ -313,324 +375,245 @@
                     <div class="page-content">
                         <!-- Page Header -->
                         <div class="page-header">
-                            <h1 class="page-title">Welcome back, John! 👋</h1>
-                            <p class="page-subtitle">Here's what's happening with your movie platform today.</p>
+                            <h1 class="page-title">Welcome back, {{ user.first_name }} 👋</h1>
+                            <p class="page-subtitle text-muted">
+                                Real-time wildlife monitoring & AI-powered threat detection system
+                            </p>
                         </div>
 
                         <!-- Enhanced Stats Grid -->
-                        <div class="row stats-grid mb-5">
-                            <div class="col-lg-3 col-md-6 col-12 mb-3">
-                                <div class="stat-card">
-                                    <div class="stat-icon primary">
-                                        <i class="fas fa-film"></i>
-                                    </div>
-                                    <div class="stat-value">1,247</div>
-                                    <div class="stat-label">Total Movies</div>
-                                    <div class="stat-change positive">
-                                        <i class="fas fa-arrow-up"></i>
-                                        12% from last month
-                                    </div>
+                        <div class="container mt-4">
+
+                            <!-- VIDEO FEED -->
+                            <div class="card mb-4">
+                                <div class="card-header d-flex justify-content-between">
+                                    <h5>📡 Drone Live Feed</h5>
+                                    <span class="badge bg-success">LIVE</span>
+                                </div>
+                                <div class="card-body p-0">
+                                    <img src="/video_feed" class="w-100"
+                                        style="height:500px; object-fit:cover; border-radius:12px;">
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-6 col-12 mb-3">
-                                <div class="stat-card success">
-                                    <div class="stat-icon success">
-                                        <i class="fas fa-users"></i>
-                                    </div>
-                                    <div class="stat-value">8,492</div>
-                                    <div class="stat-label">Active Users</div>
-                                    <div class="stat-change positive">
-                                        <i class="fas fa-arrow-up"></i>
-                                        8% from last month
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-12 mb-3">
-                                <div class="stat-card warning">
-                                    <div class="stat-icon warning">
-                                        <i class="fas fa-dollar-sign"></i>
-                                    </div>
-                                    <div class="stat-value">$24,580</div>
-                                    <div class="stat-label">Monthly Revenue</div>
-                                    <div class="stat-change positive">
-                                        <i class="fas fa-arrow-up"></i>
-                                        15% from last month
+
+                            <div class="row">
+
+                                <!-- ALERTS -->
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-header">🚨 Alerts</div>
+                                        <div class="card-body">
+                                            <p class="text-danger">Lion detected</p>
+                                            <p class="text-warning">Weak signal</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-12 mb-3">
-                                <div class="stat-card danger">
-                                    <div class="stat-icon danger">
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <div class="stat-value">342</div>
-                                    <div class="stat-label">New Reviews</div>
-                                    <div class="stat-change positive">
-                                        <i class="fas fa-arrow-up"></i>
-                                        23% from last month
+
+                                <!-- GPS -->
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-header">📍 Location</div>
+                                        <div class="card-body">
+                                            <p>Lat: -1.2921</p>
+                                            <p>Lng: 36.8219</p>
+                                        </div>
                                     </div>
                                 </div>
+
+                                <!-- STATUS -->
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-header">⚙️ System</div>
+                                        <div class="card-body">
+                                            <p>AI: Active</p>
+                                            <p>Signal: Strong</p>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
                         <!-- Recent Movies Section -->
-                        <div class="content-section">
+                        <div class="content-section" style="padding: 20px;">
                             <div class="section-header">
-                                <h2 class="section-title">Recently Added Movies</h2>
+                                <h2 class="section-title">Recent Detection Events</h2>
                                 <div class="section-actions">
-                                    <a href="add-movie.html" class="btn-primary">
-                                        <i class="fas fa-plus me-2"></i>
-                                        Add Movie
+                                    <a href="#" class="btn-primary">
+                                        <i class="fas fa-sync me-2"></i>
+                                        Refresh
                                     </a>
                                 </div>
                             </div>
 
-                            <div class="row movies-grid">
-                                <div class="col-lg-4 col-md-6 col-sm-12 col-12">
-                                    <div class="movie-card">
-                                        <a href="details-movie.html">
-                                            <img src="{% static 'images/Spider-Man.jpg' %}" alt="Movie"
-                                                class="movie-poster">
-                                        </a>
-                                        <div class="movie-info">
-                                            <h3 class="movie-title">Spider-Man: No Way Home</h3>
-                                            <p class="movie-genre">Action, Adventure, Sci-Fi</p>
-                                            <div class="movie-meta">
-                                                <div class="movie-rating">
-                                                    <i class="fas fa-star"></i>
-                                                    8.4
-                                                </div>
-                                                <div class="movie-year">2021</div>
-                                            </div>
+                            <div class="row">
+
+                                <!-- EVENT CARD -->
+                                {% for d in detections %}
+                                <div class="col-lg-4 col-md-6 col-12">
+                                    <div class="card shadow-sm mb-3">
+                                        <img src="{{ d.image.url }}" class="card-img-top"
+                                            style="height:200px; object-fit:cover;">
+
+                                        <div class="card-body">
+                                            <h5
+                                                class="card-title {% if d.is_lion %}text-danger{% else %}text-success{% endif %}">
+                                                {% if d.is_lion %}🦁 Lion Detected{% else %}✅ No Threat{% endif %}
+                                            </h5>
+
+                                            <p><strong>Location:</strong> {{ d.location }}</p>
+                                            <p><strong>Time:</strong> {{ d.timestamp|date:"h:i A" }}</p>
+
+                                            <span
+                                                class="badge {% if d.is_lion %}bg-danger{% else %}bg-success{% endif %}">
+                                                {% if d.is_lion %}Alert Sent{% else %}Normal{% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+
+                                <!-- EVENT CARD -->
+                                <div class="col-lg-4 col-md-6 col-12">
+                                    <div class="card shadow-sm mb-3">
+                                        <img src="{% static 'detections/normal1.jpg' %}" class="card-img-top"
+                                            style="height:200px; object-fit:cover;">
+
+                                        <div class="card-body">
+                                            <h5 class="card-title text-success">
+                                                ✅ No Threat
+                                            </h5>
+
+                                            <p class="mb-1"><strong>Location:</strong> Zone B</p>
+                                            <p class="mb-1"><strong>Time:</strong> 09:15 AM</p>
+
+                                            <span class="badge bg-success">Normal</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+                                <!-- EVENT CARD -->
+                                <div class="col-lg-4 col-md-6 col-12">
+                                    <div class="card shadow-sm mb-3">
+                                        <img src="{% static 'detections/lion2.jpg' %}" class="card-img-top"
+                                            style="height:200px; object-fit:cover;">
 
-                                    <div class="movie-card">
-                                        <a href="details-movie.html">
-                                            <img src="{% static 'images/Dune.jpg' %}" alt="Movie" class="movie-poster">
-                                        </a>
-                                        <div class="movie-info">
-                                            <h3 class="movie-title">Dune</h3>
-                                            <p class="movie-genre">Adventure, Drama, Sci-Fi</p>
-                                            <div class="movie-meta">
-                                                <div class="movie-rating">
-                                                    <i class="fas fa-star"></i>
-                                                    8.0
-                                                </div>
-                                                <div class="movie-year">2021</div>
-                                            </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title text-danger">
+                                                🦁 Lion Detected
+                                            </h5>
+
+                                            <p class="mb-1"><strong>Location:</strong> Zone C</p>
+                                            <p class="mb-1"><strong>Time:</strong> 08:47 AM</p>
+
+                                            <span class="badge bg-danger">Alert Sent</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4 col-md-6 col-sm-12 col-12">
-
-                                    <div class="movie-card">
-                                        <a href="details-movie.html">
-                                            <img src="{% static 'images/Top-Gun-Maverick.webp' %}" alt="Movie"
-                                                class="movie-poster">
-                                        </a>
-                                        <div class="movie-info">
-                                            <h3 class="movie-title">Top Gun: Maverick</h3>
-                                            <p class="movie-genre">Action, Drama</p>
-                                            <div class="movie-meta">
-                                                <div class="movie-rating">
-                                                    <i class="fas fa-star"></i>
-                                                    8.7
-                                                </div>
-                                                <div class="movie-year">2022</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6 col-sm-12 col-12">
-                                    <div class="movie-card">
-                                        <a href="details-movie.html">
-                                            <img src="{% static 'images/The-Dark-Knight.jpg' %}" alt="Movie"
-                                                class="movie-poster">
-                                        </a>
-                                        <div class="movie-info">
-                                            <h3 class="movie-title">The Batman</h3>
-                                            <p class="movie-genre">Action, Crime, Drama</p>
-                                            <div class="movie-meta">
-                                                <div class="movie-rating">
-                                                    <i class="fas fa-star"></i>
-                                                    7.8
-                                                </div>
-                                                <div class="movie-year">2022</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6 col-sm-12 col-12">
-                                    <div class="movie-card">
-                                        <a href="details-movie.html">
-                                            <img src="{% static 'images/Avengers-Endgame.jpg' %}" alt="Movie"
-                                                class="movie-poster">
-                                        </a>
-                                        <div class="movie-info">
-                                            <h3 class="movie-title">Avengers: Endgame</h3>
-                                            <p class="movie-genre">Action, Crime, Drama</p>
-                                            <div class="movie-meta">
-                                                <div class="movie-rating">
-                                                    <i class="fas fa-star"></i>
-                                                    7.8
-                                                </div>
-                                                <div class="movie-year">2022</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-6 col-sm-12 col-12">
-                                    <div class="movie-card">
-                                        <a href="details-movie.html">
-                                            <img src="{% static 'images/Inception.webp' %}" alt="Movie"
-                                                class="movie-poster">
-                                        </a>
-                                        <div class="movie-info">
-                                            <h3 class="movie-title">Inception</h3>
-                                            <p class="movie-genre">Action, Crime, Drama</p>
-                                            <div class="movie-meta">
-                                                <div class="movie-rating">
-                                                    <i class="fas fa-star"></i>
-                                                    7.8
-                                                </div>
-                                                <div class="movie-year">2022</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
                         <!-- Enhanced Movies Management Table -->
                         <div class="enhanced-table">
                             <div class="table-header">
-                                <h2 class="table-title">Movies</h2>
+                                <h2 class="table-title">Detection & Alert Logs</h2>
+
                                 <div class="table-filters">
-                                    <select class="filter-select select-form">
-                                        <option>All Genres</option>
-                                        <option>Action</option>
-                                        <option>Comedy</option>
-                                        <option>Drama</option>
-                                    </select>
+                                    <!-- Filter by Detection Type -->
                                     <select class="filter-select">
-                                        <option>All Status</option>
-                                        <option>Active</option>
-                                        <option>Pending</option>
-                                        <option>Inactive</option>
+                                        <option value="">All Types</option>
+                                        <option value="lion">Lion</option>
+                                        <option value="normal">No Threat</option>
+                                    </select>
+
+                                    <!-- Filter by Alert Status -->
+                                    <select class="filter-select">
+                                        <option value="">All Alerts</option>
+                                        <option value="sent">Alert Sent</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="resolved">Resolved</option>
                                     </select>
                                 </div>
                             </div>
+
                             <div class="table-wrapper mt-4 p-3">
                                 <table class="data-table">
                                     <thead>
                                         <tr>
-                                            <th>Movie</th>
-                                            <th>Genre</th>
-                                            <th>Rating</th>
-                                            <th>Release Date</th>
+                                            <th>Capture</th>
+                                            <th>Detection</th>
+                                            <th>Location</th>
+                                            <th>Time</th>
+                                            <th>Confidence</th>
                                             <th>Status</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
+
+                                        {% for d in detections %}
                                         <tr>
+                                            <!-- IMAGE -->
                                             <td>
-                                                <div class="table-movie">
-                                                    <img src="{% static 'images/Spider-Man.jpg' %}" alt="Movie"
-                                                        class="table-movie-poster">
-                                                    <div class="table-movie-info">
-                                                        <h6>Spider-Man: No Way Home</h6>
-                                                        <small>Directed by Jon Watts</small>
-                                                    </div>
-                                                </div>
+                                                <img src="{{ d.image.url }}"
+                                                    style="width:80px; height:60px; object-fit:cover; border-radius:6px;">
                                             </td>
-                                            <td>Action</td>
+
+                                            <!-- DETECTION -->
                                             <td>
-                                                <div class="d-flex align-items-center gap-1">
-                                                    <i class="fas fa-star text-warning"></i>
-                                                    8.4
-                                                </div>
+                                                {% if d.is_lion %}
+                                                <span class="text-danger">🦁 Lion</span>
+                                                {% else %}
+                                                <span class="text-success">Normal</span>
+                                                {% endif %}
                                             </td>
-                                            <td>Dec 17, 2021</td>
-                                            <td><span class="status-badge status-active">Active</span></td>
+
+                                            <!-- LOCATION -->
+                                            <td>{{ d.location }}</td>
+
+                                            <!-- TIME -->
+                                            <td>{{ d.time }}</td>
+
+                                            <!-- CONFIDENCE -->
+                                            <td>
+                                                {{ d.confidence|default:"--" }}%
+                                            </td>
+
+                                            <!-- STATUS -->
+                                            <td>
+                                                {% if d.is_lion %}
+                                                <span class="status-badge status-active">Alert Sent</span>
+                                                {% else %}
+                                                <span class="status-badge status-pending">Safe</span>
+                                                {% endif %}
+                                            </td>
+
+                                            <!-- ACTIONS -->
                                             <td>
                                                 <div class="action-buttons">
-                                                    <a href="add-movie.html" class="action-btn edit" title="Edit">
-                                                        <i class="fas fa-edit"></i>
+
+                                                    <!-- View -->
+                                                    <a href="#" class="action-btn edit" title="View">
+                                                        <i class="fas fa-eye"></i>
                                                     </a>
+
+                                                    <!-- Mark Resolved -->
+                                                    <button class="action-btn" title="Resolve">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+
+                                                    <!-- Delete -->
                                                     <button class="action-btn delete" title="Delete">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
+
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="table-movie">
-                                                    <img src="{% static 'images/Dune.jpg' %}" alt="Movie"
-                                                        class="table-movie-poster">
-                                                    <div class="table-movie-info">
-                                                        <h6>Dune</h6>
-                                                        <small>Directed by Denis Villeneuve</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>Sci-Fi</td>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-1">
-                                                    <i class="fas fa-star text-warning"></i>
-                                                    8.4
-                                                </div>
-                                            </td>
-                                            <td>Oct 22, 2021</td>
-                                            <td><span class="status-badge status-pending">Pending</span></td>
-                                            <td>
-                                                <div class="action-buttons">
-                                                    <a href="add-movie.html" class="action-btn edit" title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <button class="action-btn delete" title="Delete">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="table-movie">
-                                                    <img src="{% static 'images/Top-Gun-Maverick.webp' %}" alt="Movie"
-                                                        class="table-movie-poster">
-                                                    <div class="table-movie-info">
-                                                        <h6>Top Gun: Maverick</h6>
-                                                        <small>Directed by Joseph Kosinski</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>Action</td>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-1">
-                                                    <i class="fas fa-star text-warning"></i>
-                                                    8.4
-                                                </div>
-                                            </td>
-                                            <td>May 27, 2022</td>
-                                            <td><span class="status-badge status-active">Active</span></td>
-                                            <td>
-                                                <div class="action-buttons">
-                                                    <a href="add-movie.html" class="action-btn edit" title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <button class="action-btn delete" title="Delete">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        {% endfor %}
+
                                     </tbody>
                                 </table>
                             </div>
@@ -639,8 +622,8 @@
                 </div>
                 <!-- Footer -->
                 <div class="footer text-center shadow-sm py-3 mt-5">
-                    <p class="m-0">Copyright © 2025. All Rights Reserved. <a href="https://www.templaterise.com/"
-                            class="text-primary" target="_blank">Themes By TemplateRise</a></p>
+                    <p class="mb-0">© {{ year }} LionGuard. All rights reserved.</p>
+
                 </div>
             </div>
         </div>
