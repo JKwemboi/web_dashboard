@@ -1,4 +1,3 @@
-
 {% extends 'auth.html' %}
 {% load static %}
 {% block content %}
@@ -21,7 +20,7 @@
                 <input type="text" class="form-control" name="last_name" placeholder="Enter last name" required>
                 <label for="last_name"><i class="fas fa-user me-2"></i>Last Name</label>
             </div>
-                        <div class="form-floating mb-3">
+            <div class="form-floating mb-3">
                 <input type="text" class="form-control" name="username" placeholder="Enter username" required>
                 <label for="username"><i class="fas fa-user me-2"></i>Username</label>
             </div>
@@ -40,12 +39,21 @@
             </div>
 
             <div class="form-floating password-field mb-3">
-                <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required>
+                <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password"
+                    required>
                 <label for="confirm_password"><i class="fas fa-lock me-2"></i>Confirm Password</label>
             </div>
 
             <button type="submit" class="btn btn-login w-100 mb-3">
                 <i class="fas fa-sign-in-alt me-2"></i>Sign Up
+            </button>
+
+
+        </form>
+        <form action="login">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-login w-100 mb-3">
+                <i class="fas fa-sign-in-alt me-2"></i>Login
             </button>
         </form>
 
