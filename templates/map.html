@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Drone Live Map</title>
+
+        <!-- Leaflet CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+
+        <style>
+            body {
+                margin: 0;
+                background: #0f172a;
+                color: white;
+            }
+
+            #map {
+                height: 100vh;
+                width: 100%;
+            }
+
+            .status-box {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                background: #020617;
+                padding: 12px;
+                border-radius: 10px;
+                z-index: 1000;
+                font-size: 14px;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div id="map"></div>
+
+        <div class="status-box">
+            🚁 Drone: <span id="coords">Loading...</span><br>
+            🦁 Detections: <span id="count">0</span>
+        </div>
+
+        <!-- Leaflet JS -->
+        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+        <script>
+            // 🌍 INIT MAP
+            let map = L.map('map').setView([-1.2921, 36.8219], 13);
+
+            // 🌍 TILE LAYER
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            // 🚁 DRONE ICON
+            let droneIcon = L.icon({
+                iconUrl: "https://cdn-icons-png.flaticon.com/512/149/149060.png",
+                iconSize: [40, 40]
+            });
+
+            // 🦁 ICONS
+            let lionIcon = L.icon({
+                iconUrl: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
+                iconSize: [35, 35]
+            });
+
+            let normalIcon = L.icon({
+                iconUrl: "https://cdn-icons-png.flaticon.com/512/190/190411.png",
+                iconSize: [30, 30]
+            });
+
+            // 🚁 DRONE MARKER
+            let droneMarker = L.marker([-1.2921, 36.8219], { icon: droneIcon }).addTo(map);
+
+            // 🧠 STORE DETECTIONS
+            let detectionMarkers = [];
+
+            // 🚁 UPDATE DRONE LOCATION
+            function updateDrone() {
+                fetch("/drone-location/")
+                    .then(res => res.json())
+                    .then(data => {
+
+                        let lat = data.lat;
+                        let lng = data.lng;
+
+                        droneMarker.setLatLng([lat, lng]);
+                        map.setView([lat, lng]);
+
+                        document.getElementById("coords").innerText =
+                            lat.toFixed(5) + ", " + lng.toFixed(5);
+                    });
+            }
+
+            // 🦁 LOAD DETECTIONS
+            function loadDetections() {
+
+                // remove old markers
+                detectionMarkers.forEach(m => map.removeLayer(m));
+                detectionMarkers = [];
+
+                fetch("/detection-locations/")
+                    .then(res => res.json())
+                    .then(data => {
+
+                        document.getElementById("count").innerText = data.length;
+
+                        data.forEach(d => {
+
+                            let icon = d.is_lion ? lionIcon : normalIcon;
+
+                            let marker = L.marker([d.lat, d.lng], { icon: icon })
+                                .addTo(map)
+                                .bindPopup(`
+                        <b>${d.is_lion ? "🦁 Lion Detected" : "✅ No Threat"}</b><br>
+                        Time: ${d.time}<br>
+                        Confidence: ${d.confidence}%
+                    `);
+
+                            // 🔴 danger circle
+                            if (d.is_lion) {
+                                L.circle([d.lat, d.lng], {
+                                    color: 'red',
+                                    radius: 200
+                                }).addTo(map);
+                            }
+
+                            detectionMarkers.push(marker);
+                        });
+
+                    });
+            }
+
+            // 🔄 AUTO REFRESH
+            setInterval(updateDrone, 2000);
+            setInterval(loadDetections, 3000);
+
+        </script>
+
+    </body>
+
+</html>

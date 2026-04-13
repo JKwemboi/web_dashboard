@@ -1,10 +1,15 @@
 import cv2
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from django.http import StreamingHttpResponse, JsonResponse
 from detection.models import Detection
+from django.db.models import Count
+from datetime import datetime, timedelta
+from .models import SystemSettings
 import json
+
 
 # from .camera import gen_frames
 from . import views
@@ -128,15 +133,125 @@ def analytics(request):
 
 
 def users(request):
-    return render(request, 'users.html', {'user': request.user})
+    users = User.objects.all()
+    return render(request, 'users.html', {'users': users})
+
+
+def users_page(request):
+    users = User.objects.all()
+    return render(request, 'users.html', {'users': users})
+
+
+def toggle_user(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.is_active = not user.is_active
+    user.save()
+    return redirect('users')
+
+
+def delete_user(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.delete()
+    return redirect('users')
+
+
+def admin_only(user):
+    return user.is_superuser
+
+
+def drone_location(request):
+    # to be replaced with real drone GPS later
+    data = {
+        "lat": -1.2921,
+        "lng": 36.8219
+    }
+    return JsonResponse(data)
+
+
+def detection_locations(request):
+    detections = Detection.objects.all().order_by('-timestamp')[:50]
+
+    data = []
+    for d in detections:
+        data.append({
+            "lat": d.latitude,
+            "lng": d.longitude,
+            "is_lion": d.is_lion,
+            "time": d.timestamp.strftime("%H:%M:%S"),
+            "confidence": getattr(d, 'confidence', 0)
+        })
+
+    return JsonResponse(data, safe=False)
 
 
 def forgot_password(request):
-    if request.method == 'POST':
-        email = request.POST['email']
-        # Here you would typically handle the password reset logic,
-        # such as sending a reset link to the user's email.
-        messages.success(request, 'Password reset link sent to your email.')
-        return redirect('login')
-    else:
-        return render(request, 'forgotpassword.html')
+    if request.method == "POST":
+        email = request.POST.get("email")
+
+        if User.objects.filter(email=email).exists():
+            # 🔥 Here you will later send email
+            messages.success(request, "Password reset link sent to your email.")
+        else:
+            messages.error(request, "Email not found.")
+
+    return render(request, "forgotpassword.html")
+
+
+def analytics(request):
+
+    detections = Detection.objects.all()
+
+    total = detections.count()
+    lions = detections.filter(is_lion=True).count()
+    normal = detections.filter(is_lion=False).count()
+
+    # 📈 Trend (last 7 days)
+    dates = []
+    counts = []
+
+    for i in range(6, -1, -1):
+        day = datetime.now() - timedelta(days=i)
+        count = detections.filter(
+            is_lion=True,
+            timestamp__date=day.date()
+        ).count()
+
+        dates.append(day.strftime("%a"))
+        counts.append(count)
+
+    # 📍 Hotspots
+    zones = detections.values('location') \
+                      .annotate(count=Count('id')) \
+                      .order_by('-count')[:5]
+
+    return render(request, 'analytics.html', {
+        'total': total,
+        'lions': lions,
+        'normal': normal,
+        'dates': dates,
+        'counts': counts,
+        'zones': zones
+    })
+
+
+def settings_view(request):
+    settings = SystemSettings.objects.first()
+
+    if request.method == "POST":
+        settings.drone_name = request.POST.get('drone_name')
+        settings.max_speed = request.POST.get('max_speed')
+        settings.auto_patrol = request.POST.get('auto_patrol') == "on"
+
+        settings.confidence = request.POST.get('confidence')
+        settings.alert_enabled = request.POST.get('alert_enabled') == "on"
+        settings.save_images = request.POST.get('save_images') == "on"
+
+        settings.phone = request.POST.get('phone')
+        settings.email = request.POST.get('email')
+
+        settings.refresh_rate = request.POST.get('refresh_rate')
+
+        settings.save()
+        return redirect('settings')
+
+    return render(request, 'setting.html', {'settings': settings})
