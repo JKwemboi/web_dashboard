@@ -5,7 +5,7 @@ urlpatterns = [
     path('', views.dashboard, name='dashboard'),
     path('login', views.login, name='login'),
     path('signup', views.signup, name='signup'),
-    path('profile', views.profile, name='profile'),
+    path('profile/', views.profile, name='profile'),
     path('logout', views.logout, name='logout'),
     path('video_feed', views.video_feed, name='video_feed'),
     path('map/', views.map_view, name='map'),
@@ -20,7 +20,8 @@ urlpatterns = [
     path('toggle-user/<int:user_id>/', views.toggle_user, name='toggle_user'),
     path('delete-user/<int:user_id>/', views.delete_user, name='delete_user'),
     path('map/', views.drone_location, name='drone_location'),
-    path('detection-locations/', views.detection_locations, name='detection_locations'),
+    path('detection-locations/', views.detection_locations,
+         name='detection_locations'),
     path('analytics/', views.analytics, name='analytics'),
     path('settings/', views.settings_view, name='settings'),
 ]

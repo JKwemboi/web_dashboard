@@ -108,16 +108,19 @@
 
         <script>
             // 📈 LINE CHART
-            new Chart(document.getElementById('trendChart'), {
-                type: 'line',
-                data: {
-                    labels: {{ dates | safe }},
-                datasets : [{
+            new Chart(document.getElementById('trendChart'),
+                {
+                    type: 'line',
+                    data:
+                    {
+                        labels: {{ dates | safe }},
+                datasets :
+                [{
                     label: 'Lion Detections',
                     data: {{ counts | safe }},
-                borderWidth: 2,
-                fill: false
-        }]
+                    borderWidth: 2,
+                    fill: false
+            }]
     }
 });
 

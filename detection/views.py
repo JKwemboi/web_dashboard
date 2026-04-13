@@ -8,6 +8,7 @@ from detection.models import Detection
 from django.db.models import Count
 from datetime import datetime, timedelta
 from .models import SystemSettings
+from django.contrib.auth.decorators import login_required
 import json
 
 
@@ -94,8 +95,20 @@ def video_feed(request):
                                  content_type='multipart/x-mixed-replace; boundary=frame')
 
 
+@login_required
 def profile(request):
-    return render(request, 'profile.html', {'user': request.user})
+
+    if request.method == "POST":
+        user = request.user
+
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.email = request.POST.get('email')
+
+        user.save()
+        return redirect('profile')
+
+    return render(request, 'profile.html')
 
 
 def settings(request):
@@ -190,7 +203,8 @@ def forgot_password(request):
 
         if User.objects.filter(email=email).exists():
             # 🔥 Here you will later send email
-            messages.success(request, "Password reset link sent to your email.")
+            messages.success(
+                request, "Password reset link sent to your email.")
         else:
             messages.error(request, "Email not found.")
 
