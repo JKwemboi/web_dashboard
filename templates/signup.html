@@ -4,9 +4,14 @@
 <div class="login-container">
     <div class="login-card">
 
-        <div class="logo text-center mb-5">
-            <a href="login.html"><img src="{% static 'images/logo.png' %}" class="large-logo-img" alt="logo large"></a>
+        {% for error_message in error_messages %}
+        <div class="alert alert-danger" role="alert">
+
+            {{ error_message }}
         </div>
+        {% endfor %}
+
+
 
         <form action="signup" method="post">
             {% csrf_token %}
@@ -47,8 +52,6 @@
             <button type="submit" class="btn btn-login w-100 mb-3">
                 <i class="fas fa-sign-in-alt me-2"></i>Sign Up
             </button>
-
-
         </form>
         <form action="login">
             {% csrf_token %}
@@ -73,7 +76,7 @@
         </div>
 
         <div class="signup-link">
-            <p class="text-muted mb-0">Have an account? <a href="login.html">Sign In now</a></p>
+            <p class="text mb-0">Have an account? <a href="login.html">Sign In now</a></p>
         </div>
     </div>
 </div>

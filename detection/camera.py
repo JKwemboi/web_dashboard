@@ -1,36 +1,40 @@
-import cv2
-from ultralytics import YOLO
-from .models import Detection
+# import cv2
+# from ultralytics import YOLO
+# from .models import Detection
 
-model = YOLO('yolov8n.pt')
+# model = YOLO('yolov8n.pt')
 
 
-def get_frames():
-    cap = cv2.VideoCapture(0)
+# def get_frames():
+#     cap = cv2.VideoCapture(0)
 
-    while True:
-        ret, frame = cap.read()
-        if not ret:
-            break
+#     while True:
+#         ret, frame = cap.read()
+#         if not ret:
+#             break
 
-        results = model(frame)
+#         results = model(frame)
 
-    for r in results:
-        if r.boxes is not None and len(r.boxes) > 0:
-            for box in r.boxes:
-                label = model.names[int(box.cls)]
-                conf = float(box.conf)
+#         for result in results:
+#             for box in result.boxes:
+#                 x1, y1, x2, y2 = map(int, box.xyxy[0])
+#                 confidence = float(box.conf[0])
+#                 label = model.names[int(box.cls[0])]
 
-                if conf > 0.6:  # only strong detections
-                    Detection.objects.create(
-                        label=label,
-                        confidence=conf
-                    )
+#                 if confidence > 0.5:
+#                     cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+#                     cv2.putText(frame, f'{label} {confidence:.2f}', (x1, y1 - 10),
+#                                 cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
 
-        annotated = r[0].plot()
+#                     Detection.objects.create(
+#                         is_lion=(label == 'lion'),
+#                         location=f'({x1}, {y1})',
+#                         confidence=confidence,
+#                         label=label
+#                     )
 
-        _, buffer = cv2.imencode('.jpg', annotated)
-        frame = buffer.tobytes()
+#         _, buffer = cv2.imencode('.jpg', annotated)
+#         frame = buffer.tobytes()
 
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+#         yield (b'--frame\r\n'
+#                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')

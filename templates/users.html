@@ -45,11 +45,16 @@
 
                 <!-- HEADER -->
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h3 >👥 User Management</h3>
+                    <h3>👥 User Management</h3>
 
                     <!-- SEARCH -->
                     <input type="text" id="searchInput" class="form-control search-box" placeholder="Search users...">
                 </div>
+
+                <form action="dashboard" >
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Go to Dashboard</button>
+                </form>
 
                 <!-- FILTER -->
                 <div class="mb-3">
