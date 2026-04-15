@@ -38,7 +38,11 @@
 
             <h3 class="mb-4">📊 System Analytics</h3>
 
-            <!-- SUMMARY -->
+            <form action="dashboard">
+                {% csrf_token%}
+                <button class="btn btn-login" type="submit">Dashboard</button>
+            </form>
+            
             <div class="row mb-4">
 
                 <div class="col-md-4">
@@ -50,7 +54,7 @@
 
                 <div class="col-md-4">
                     <div class="card stat-box">
-                        <h5>🦁 Lion Detections</h5>
+                        <h5 class="text-bold">🦁 Lion Detections</h5>
                         <h2 class="text-danger">{{ lions }}</h2>
                     </div>
                 </div>
@@ -85,7 +89,7 @@
 
             <!-- HOTSPOTS -->
             <div class="card mt-4 p-3">
-                <h5>📍 High Activity Zones</h5>
+                <h5> High Activity Zones</h5>
 
                 <table class="table table-dark table-striped mt-3">
                     <thead>

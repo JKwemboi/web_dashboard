@@ -17,6 +17,8 @@ from . import views
 
 
 def dashboard(request):
+    if request.method =='POST':
+        return render (request, 'index.html',{'user': request.user,'detections':detections})
     # require login to access dashboard
     if not request.user.is_authenticated:
         return redirect('login')

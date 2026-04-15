@@ -7,7 +7,7 @@ class Detection (models.Model):
     confidence = models.FloatField(null=True, blank=True)
     label = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='detections/', null=True)
+    image = models.ImageField(upload_to='detections/images', null=True)
 
 
 class Alerts(models.Model):
