@@ -1,4 +1,8 @@
+import os
+
+from . import views
 import cv2
+import time
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import user_passes_test
@@ -10,15 +14,21 @@ from datetime import datetime, timedelta
 from .models import SystemSettings
 from django.contrib.auth.decorators import login_required
 import json
+from ultralytics import YOLO
+from django.conf import settings
+
+
+# MODEL_PATH = os.path.join(settings.BASE_DIR, 'detection', 'best.pt')
+    
+# model = YOLO(MODEL_PATH)
 
 
 # from .camera import gen_frames
-from . import views
 
 
 def dashboard(request):
-    if request.method =='POST':
-        return render (request, 'index.html',{'user': request.user,'detections':detections})
+    if request.method == 'POST':
+        return render(request, 'index.html', {'user': request.user, 'detections': detections})
     # require login to access dashboard
     if not request.user.is_authenticated:
         return redirect('login')

@@ -36,13 +36,16 @@
 
         <div class="container mt-4">
 
+            <div class="d-flex justify-content-start mb-3">
+                <a href="{% url 'dashboard' %}" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+                </a>
+            </div>
+
             <h3 class="mb-4">📊 System Analytics</h3>
 
-            <form action="dashboard">
-                {% csrf_token%}
-                <button class="btn btn-login" type="submit">Dashboard</button>
-            </form>
-            
+
+
             <div class="row mb-4">
 
                 <div class="col-md-4">

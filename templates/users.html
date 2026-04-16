@@ -41,6 +41,12 @@
 
         <div class="container mt-4">
 
+            <div class="d-flex justify-content-start mb-3">
+                <a href="{% url 'dashboard' %}" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+                </a>
+            </div>
+
             <div class="card p-4">
 
                 <!-- HEADER -->
@@ -50,11 +56,6 @@
                     <!-- SEARCH -->
                     <input type="text" id="searchInput" class="form-control search-box" placeholder="Search users...">
                 </div>
-
-                <form action="dashboard" >
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">Go to Dashboard</button>
-                </form>
 
                 <!-- FILTER -->
                 <div class="mb-3">
