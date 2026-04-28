@@ -1,493 +1,216 @@
+{% extends 'base_app.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>web_dashboard</title>
-        <!-- Stylesheets -->
-        <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-        <link href="{% static 'icons/fontawesome/css/fontawesome.min.css' %}" rel="stylesheet">
-        <link href="{% static 'icons/fontawesome/css/brands.min.css' %}" rel="stylesheet">
-        <link href="{% static 'icons/fontawesome/css/solid.min.css' %}" rel="stylesheet">
-        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+{% block title %}Dashboard | LionGuard Command{% endblock %}
 
-    </head>
-
-    <body>
-        <!-- Preloader -->
-        <div id="preloader">
-            <div class="spinner"></div>
+{% block content %}
+<div class="page-header">
+    <p class="page-kicker">Mission Overview</p>
+    <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+        <div>
+            <h1 class="page-title">Welcome back, {{ user.first_name|default:user.username }}</h1>
+            <p class="page-subtitle">Live surveillance feed, detection activity, robot telemetry, and alert readiness.</p>
         </div>
-        <!-- Main Wrapper -->
-        <div id="main-wrapper" class="d-flex">
-            <div class="sidebar">
-                <!-- Sidebar -->
-                <div class="sidebar-header">
-                    <div class="lg-logo"><a href="index.html"><img src="{% static 'images/logo.png' %}"
-                                class="large-logo-img" alt="logo large"></a></div>
-                    <div class="sm-logo"><a href="index.html"><img src="{% static 'images/small-logo.png' %}"
-                                class="small-logo-img" alt="logo small"></a></div>
-                </div>
-                <div class="sidebar-body custom-scrollbar">
-                    <ul class="sidebar-menu">
-
-                        <!-- MAIN -->
-                        <li class="sidebar-label">Main</li>
-
-                        <li>
-                            <a href="{% url 'dashboard' %}" class="sidebar-link active">
-                                <i class="fa-solid fa-house"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="{% url 'analytics' %}" class="sidebar-link">
-                                <i class="fa-solid fa-chart-line"></i>
-                                <p>Analytics</p>
-                            </a>
-                        </li>
-
-                        <!-- MONITORING -->
-                        <li class="sidebar-label mt-4">Monitoring</li>
-
-                        <li>
-                            <a href="{% url 'map' %}" class="sidebar-link">
-                                <i class="fa-solid fa-map-location-dot"></i>
-                                <p>Live Map</p>
-                            </a>
-                        </li>
-
-                        <!-- CONTROL -->
-                        <li class="sidebar-label mt-4">Control</li>
-
-                        <li>
-                            <a href="{% url 'drone_control_page' %}" class="sidebar-link">
-                                <i class="fa-solid fa-gamepad"></i>
-                                <p>Drone Control</p>
-                            </a>
-                        </li>
-
-                        <!-- <li>
-                            <a href="{% url 'system_status' %}" class="sidebar-link">
-                                <i class="fa-solid fa-microchip"></i>
-                                <p>System Status</p>
-                            </a>
-                        </li> -->
-
-                        <!-- USERS -->
-                        <li class="sidebar-label mt-4">Users</li>
-
-                        <li>
-                            <a href="{% url 'users' %}" class="sidebar-link">
-                                <i class="fa-solid fa-users"></i>
-                                <p>All Users</p>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-
-            <!-- Header -->
-            <div class="header d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center">
-                    <div class="menu-toggle me-3 d-block d-lg-none text-color-1"><span><i
-                                class="fa-solid fa-bars font-size-24"></i></span></div>
-                    <div class="d-none d-md-block d-lg-block">
-                        <div class="search-container">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" class="search-input" placeholder="Search anything...">
-                        </div>
-                    </div>
-                </div>
-                <!-- Notifications Dropdown -->
-                <div class="d-flex align-items-center">
-                    <ul class="nav d-flex align-items-center">
-                        <!-- Messages Dropdown -->
-                        <li class="nav-item me-4">
-                            <a href="#" class="text-color-1 position-relative header-nav-item" role="button"
-                                data-bs-toggle="dropdown" data-bs-offset="0,0" aria-expanded="false">
-                                <i class="fa-solid fa-envelope fa-lg"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end mt-3">
-                                <div id="chatmessage" class="h-380 scroll-y p-3 custom-scrollbar">
-                                    <!-- Chat Timeline -->
-                                    <ul class="timeline">
-                                        <!-- Item 1 -->
-                                        <li>
-                                            <div class="timeline-panel">
-                                                <div class="media me-2">
-                                                    <img alt="image" width="50"
-                                                        src="{% static 'images/avatar-1.jpg' %}">
-                                                </div>
-                                                <div class="media-body">
-                                                    <h6 class="mb-1">We talked about a project...</h6>
-                                                    <small class="d-block"><i class="fa-solid fa-clock"></i> 30 min
-                                                        ago</small>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <a class="all-notification" href="#">See all message <i
-                                        class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </li>
-                        <!-- Notifications Dropdown -->
-                        <li class="nav-item me-4">
-                            <a href="#" class="text-color-1 notification header-nav-item" role="button"
-                                data-bs-toggle="dropdown" data-bs-offset="0,0" aria-expanded="false">
-                                <i class="fa-regular fa-bell fa-lg"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end mt-3">
-                                <div id="Notification" class="h-380 scroll-y p-3 custom-scrollbar">
-                                    <!-- Notifications Timeline -->
-                                    <ul class="timeline">
-                                        <li>
-                                            <div class="timeline-panel">
-                                                <div class="media me-2">
-                                                    <img alt="image" width="50" src="{% static 'images/profile.png' %}">
-                                                </div>
-                                                <div class="media-body">
-                                                    <h6 class="mb-1">Dr Smith uploaded a new report</h6>
-                                                    <small class="d-block">10 December 2023 - 08:15 AM</small>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-
-                                </div>
-                                <a class="all-notification" href="#">See all notifications <i
-                                        class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </li>
-                        <li class="nav-item me-4" id="themeToggle">
-                            <span class="header-nav-item sun-icon">
-                                <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </span>
-                            <span class="moon-icon header-nav-item d-none">
-                                <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 20 20">
-                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                                </svg>
-                            </span>
-                        </li>
-                        <!-- User Profile -->
-                        <li class="nav-item dropdown user-profile">
-
-                            <!-- CLICKABLE USER AREA -->
-                            <a class="d-flex align-items-center dropdown-toggle text-decoration-none" href="#"
-                                id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-
-                                <!-- USER IMAGE -->
-                                <img src="{% static 'images/avatar-6.png' %}" class="user-avatar me-2" alt="">
-                            </a>
-                            <!-- DROPDOWN MENU -->
-                            <ul class="dropdown-menu dropdown-menu-end mt-3" aria-labelledby="userDropdown">
-
-                                <li>
-                                    <a class="dropdown-item py-2" href="{% url 'profile' %}">
-                                        <i class="fa-solid fa-user me-2 text-success"></i>
-                                        Profile
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item py-2" href="{% url 'settings' %}">
-                                        <i class="fa-solid fa-gear me-2 text-info"></i>
-                                        Settings
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li>
-                                    <a href="{% url 'logout' %}" class="dropdown-item py-2">
-                                        <i class="fa-solid fa-right-from-bracket me-2 text-danger"></i>
-                                        Logout
-                                    </a>
-                                </li>
-
-                            </ul>
-
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <!-- Content Wrapper -->
-            <div class="content-wrapper">
-                <!-- Main Content -->
-                <div class="main-content">
-                    <div class="page-content">
-                        <!-- Page Header -->
-                        <div class="page-header">
-                            <h1 class="page-title">Welcome back, {{ user.first_name }} 👋</h1>
-                            <p class="page-subtitle text-muted">
-                                Real-time wildlife monitoring & AI-powered threat detection system
-                            </p>
-                        </div>
-
-                        <!-- Enhanced Stats Grid -->
-                        <div class="container mt-4">
-
-                            <!-- VIDEO FEED -->
-                            <div class="card mb-4">
-                                <div class="card-header d-flex justify-content-between">
-                                    <h5>📡 Drone Live Feed</h5>
-                                    <span class="badge bg-success">LIVE</span>
-                                </div>
-                                <div class="card-body p-0">
-                                    <img src="/video_feed" class="w-100"
-                                        style="height:500px; object-fit:cover; border-radius:12px;">
-                                </div>
-                            </div>
-
-                            <div class="row">
-
-                                <!-- ALERTS -->
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-header">🚨 Alerts</div>
-                                        <div class="card-body">
-                                            <p class="text-danger">Lion detected</p>
-                                            <p class="text-warning">Weak signal</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- GPS -->
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-header">📍 Location</div>
-                                        <div class="card-body">
-                                            <p>Lat: -1.2921</p>
-                                            <p>Lng: 36.8219</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- STATUS -->
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-header">⚙️ System</div>
-                                        <div class="card-body">
-                                            <p>AI: Active</p>
-                                            <p>Signal: Strong</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <!-- Recent Movies Section -->
-                        <div class="content-section" style="padding: 20px;">
-                            <div class="section-header">
-                                <h2 class="section-title">Recent Detection Events</h2>
-                                <div class="section-actions">
-                                    <a href="#" class="btn-primary">
-                                        <i class="fas fa-sync me-2"></i>
-                                        Refresh
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="row">
-
-                                <!-- EVENT CARD -->
-                                {% for d in detections %}
-                                <div class="col-lg-4 col-md-6 col-12">
-                                    <div class="card shadow-sm mb-3">
-                                        <img src="{{ d.image.url }}" class="card-img-top"
-                                            style="height:200px; object-fit:cover;">
-
-                                        <div class="card-body">
-                                            <h5
-                                                class="card-title {% if d.is_lion %}text-danger{% else %}text-success{% endif %}">
-                                                {% if d.is_lion %}🦁 Lion Detected{% else %}✅ No Threat{% endif %}
-                                            </h5>
-
-                                            <p><strong>Location:</strong> {{ d.location }}</p>
-                                            <p><strong>Time:</strong> {{ d.timestamp|date:"h:i A" }}</p>
-
-                                            <span
-                                                class="badge {% if d.is_lion %}bg-danger{% else %}bg-success{% endif %}">
-                                                {% if d.is_lion %}Alert Sent{% else %}Normal{% endif %}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endfor %}
-
-                                <!-- EVENT CARD -->
-                                <div class="col-lg-4 col-md-6 col-12">
-                                    <div class="card shadow-sm mb-3">
-                                        <img src="{% static 'detections/normal1.jpg' %}" class="card-img-top"
-                                            style="height:200px; object-fit:cover;">
-
-                                        <div class="card-body">
-                                            <h5 class="card-title text-success">
-                                                ✅ No Threat
-                                            </h5>
-
-                                            <p class="mb-1"><strong>Location:</strong> Zone B</p>
-                                            <p class="mb-1"><strong>Time:</strong> 09:15 AM</p>
-
-                                            <span class="badge bg-success">Normal</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- EVENT CARD -->
-                                <div class="col-lg-4 col-md-6 col-12">
-                                    <div class="card shadow-sm mb-3">
-                                        <img src="{% static 'detections/lion2.jpg' %}" class="card-img-top"
-                                            style="height:200px; object-fit:cover;">
-
-                                        <div class="card-body">
-                                            <h5 class="card-title text-danger">
-                                                🦁 Lion Detected
-                                            </h5>
-
-                                            <p class="mb-1"><strong>Location:</strong> Zone C</p>
-                                            <p class="mb-1"><strong>Time:</strong> 08:47 AM</p>
-
-                                            <span class="badge bg-danger">Alert Sent</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <!-- Enhanced Movies Management Table -->
-                        <div class="enhanced-table">
-                            <div class="table-header">
-                                <h2 class="table-title">Detection & Alert Logs</h2>
-
-                                <div class="table-filters">
-                                    <!-- Filter by Detection Type -->
-                                    <select class="filter-select">
-                                        <option value="">All Types</option>
-                                        <option value="lion">Lion</option>
-                                        <option value="normal">No Threat</option>
-                                    </select>
-
-                                    <!-- Filter by Alert Status -->
-                                    <select class="filter-select">
-                                        <option value="">All Alerts</option>
-                                        <option value="sent">Alert Sent</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="resolved">Resolved</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="table-wrapper mt-4 p-3">
-                                <table class="data-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Capture</th>
-                                            <th>Detection</th>
-                                            <th>Location</th>
-                                            <th>Time</th>
-                                            <th>Confidence</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-
-                                        {% for d in detections %}
-                                        <tr>
-                                            <!-- IMAGE -->
-                                            <td>
-                                                <img src="{{ d.image.url }}"
-                                                    style="width:80px; height:60px; object-fit:cover; border-radius:6px;">
-                                            </td>
-
-                                            <!-- DETECTION -->
-                                            <td>
-                                                {% if d.is_lion %}
-                                                <span class="text-danger">🦁 Lion</span>
-                                                {% else %}
-                                                <span class="text-success">Normal</span>
-                                                {% endif %}
-                                            </td>
-
-                                            <!-- LOCATION -->
-                                            <td>{{ d.location }}</td>
-
-                                            <!-- TIME -->
-                                            <td>{{ d.time }}</td>
-
-                                            <!-- CONFIDENCE -->
-                                            <td>
-                                                {{ d.confidence|default:"--" }}%
-                                            </td>
-
-                                            <!-- STATUS -->
-                                            <td>
-                                                {% if d.is_lion %}
-                                                <span class="status-badge status-active">Alert Sent</span>
-                                                {% else %}
-                                                <span class="status-badge status-pending">Safe</span>
-                                                {% endif %}
-                                            </td>
-
-                                            <!-- ACTIONS -->
-                                            <td>
-                                                <div class="action-buttons">
-
-                                                    <!-- View -->
-                                                    <a href="#" class="action-btn edit" title="View">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-
-                                                    <!-- Mark Resolved -->
-                                                    <button class="action-btn" title="Resolve">
-                                                        <i class="fas fa-check"></i>
-                                                    </button>
-
-                                                    <!-- Delete -->
-                                                    <button class="action-btn delete" title="Delete">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        {% endfor %}
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Footer -->
-                <div class="footer text-center shadow-sm py-3 mt-5">
-                    <p class="mb-0">© {{ year }} LionGuard. All rights reserved.</p>
-
-                </div>
-            </div>
+        <div class="action-row">
+            <a href="{% url 'drone_control_page' %}" class="btn-robot">
+                <i class="fa-solid fa-gamepad"></i>
+                Robot Control
+            </a>
+            <a href="{% url 'map' %}" class="btn-robot-secondary">
+                <i class="fa-solid fa-map-location-dot"></i>
+                Live Map
+            </a>
         </div>
-        <!-- Scripts -->
-        <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-        <script src="{% static 'plugin/chart/chart.js' %}"></script>
-        <script src="{% static 'js/chart.js' %}"></script>
-        <script src="{% static 'js/main.js' %}"></script>
-    </body>
+    </div>
+</div>
 
-</html>
+<section class="stat-grid mb-4">
+    <div class="robot-card stat-tile">
+        <div class="stat-label">Robot Status</div>
+        <div class="stat-value">Online</div>
+        <div class="stat-note"><i class="fa-solid fa-signal me-1 text-success"></i> 42 ms command latency</div>
+    </div>
+    <div class="robot-card stat-tile">
+        <div class="stat-label">Total Detections</div>
+        <div class="stat-value">{{ total_detections|default:"0" }}</div>
+        <div class="stat-note">All saved detection events</div>
+    </div>
+    <div class="robot-card stat-tile">
+        <div class="stat-label">Threat Detections</div>
+        <div class="stat-value text-danger">{{ lion_detections|default:"0" }}</div>
+        <div class="stat-note">AI labels requiring operator review</div>
+    </div>
+    <div class="robot-card stat-tile">
+        <div class="stat-label">Current Zone</div>
+        <div class="stat-value">A-12</div>
+        <div class="stat-note">Nairobi patrol perimeter</div>
+    </div>
+</section>
+
+<div class="row g-4">
+    <div class="col-xl-8">
+        <section class="robot-card">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Robot Live Video Feed</h2>
+                    <p class="mb-0 muted-copy">Primary camera stream with AI detection overlay readiness.</p>
+                </div>
+                <span class="status-pill status-live"><span class="live-dot"></span> Live</span>
+            </div>
+            <div class="video-shell">
+                <img src="{% url 'video_feed' %}" alt="Live video feed from surveillance robot">
+                <div class="video-overlay">
+                    <span class="metric-pill"><i class="fa-solid fa-camera"></i> Front camera</span>
+                    <span class="metric-pill"><i class="fa-solid fa-brain"></i> AI model armed</span>
+                    <span class="metric-pill"><i class="fa-solid fa-location-crosshairs"></i> GPS locked</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-xl-4">
+        <section class="robot-card h-100">
+            <div class="panel-header">
+                <h2 class="panel-title">Operations Health</h2>
+                <span class="status-pill status-safe">Nominal</span>
+            </div>
+            <div class="p-3 telemetry-list">
+                <div class="telemetry-item">
+                    <span><i class="fa-solid fa-battery-three-quarters me-2 text-success"></i> Battery</span>
+                    <strong>85%</strong>
+                </div>
+                <div class="telemetry-item">
+                    <span><i class="fa-solid fa-wifi me-2 text-info"></i> Signal</span>
+                    <strong>Strong</strong>
+                </div>
+                <div class="telemetry-item">
+                    <span><i class="fa-solid fa-microchip me-2 text-success"></i> AI Service</span>
+                    <strong>Active</strong>
+                </div>
+                <div class="telemetry-item">
+                    <span><i class="fa-solid fa-shield-halved me-2 text-warning"></i> Alert Channel</span>
+                    <strong>Armed</strong>
+                </div>
+                <div class="telemetry-item">
+                    <span><i class="fa-solid fa-route me-2 text-info"></i> Patrol Mode</span>
+                    <strong>Assisted</strong>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<section class="mt-4">
+    <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-3">
+        <div>
+            <p class="page-kicker mb-1">Latest Events</p>
+            <h2 class="panel-title">Recent Detection Events</h2>
+        </div>
+        <a href="{% url 'analytics' %}" class="btn-robot-secondary">
+            <i class="fa-solid fa-chart-line"></i>
+            View Analytics
+        </a>
+    </div>
+
+    {% if detections %}
+    <div class="event-grid">
+        {% for d in detections %}
+        <article class="robot-card event-card">
+            {% if d.image %}
+            <img src="{{ d.image.url }}" class="capture-thumb" alt="Detection capture">
+            {% else %}
+            <div class="capture-placeholder"><i class="fa-solid fa-camera-retro"></i></div>
+            {% endif %}
+            <div class="event-body">
+                <div class="event-title">
+                    <h3>{% if d.is_lion %}Threat Detected{% else %}Safe Event{% endif %}</h3>
+                    <span class="status-pill {% if d.is_lion %}status-danger{% else %}status-safe{% endif %}">
+                        {% if d.is_lion %}Alert{% else %}Normal{% endif %}
+                    </span>
+                </div>
+                <div class="meta-list">
+                    <span><i class="fa-solid fa-location-dot me-2"></i>{{ d.location|default:"Unknown zone" }}</span>
+                    <span><i class="fa-solid fa-clock me-2"></i>{{ d.timestamp|date:"M d, H:i" }}</span>
+                    <span><i class="fa-solid fa-crosshairs me-2"></i>{{ d.confidence|default:"--" }}% confidence</span>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="robot-card empty-state">
+        <i class="fa-solid fa-folder-open fa-2x mb-3"></i>
+        <p class="mb-0">No detections have been saved yet.</p>
+    </div>
+    {% endif %}
+</section>
+
+<section class="robot-card mt-4">
+    <div class="panel-header">
+        <h2 class="panel-title">Detection and Alert Logs</h2>
+        <div class="action-row">
+            <select class="form-select form-select-sm robot-input" aria-label="Filter detection type">
+                <option>All Types</option>
+                <option>Threat</option>
+                <option>Safe</option>
+            </select>
+            <select class="form-select form-select-sm robot-input" aria-label="Filter alert status">
+                <option>All Statuses</option>
+                <option>Alert Sent</option>
+                <option>Resolved</option>
+            </select>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="robot-table">
+            <thead>
+                <tr>
+                    <th>Capture</th>
+                    <th>Detection</th>
+                    <th>Location</th>
+                    <th>Time</th>
+                    <th>Confidence</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in detections %}
+                <tr>
+                    <td>
+                        {% if d.image %}
+                        <img src="{{ d.image.url }}" class="table-capture" alt="Detection thumbnail">
+                        {% else %}
+                        <div class="table-capture d-grid place-items-center"></div>
+                        {% endif %}
+                    </td>
+                    <td>{% if d.is_lion %}Threat{% else %}Safe{% endif %}</td>
+                    <td>{{ d.location|default:"Unknown" }}</td>
+                    <td>{{ d.timestamp|date:"M d, H:i" }}</td>
+                    <td>{{ d.confidence|default:"--" }}%</td>
+                    <td>
+                        <span class="status-pill {% if d.is_lion %}status-danger{% else %}status-safe{% endif %}">
+                            {% if d.is_lion %}Alert Sent{% else %}Normal{% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-row">
+                            <button class="header-nav-item" type="button" title="View event">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <button class="header-nav-item" type="button" title="Mark resolved">
+                                <i class="fa-solid fa-check"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="empty-state">Detection logs will appear here after the robot saves events.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

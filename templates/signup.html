@@ -1,83 +1,72 @@
 {% extends 'auth.html' %}
-{% load static %}
+
+{% block title %}Create Account | LionGuard Command{% endblock %}
+
 {% block content %}
-<div class="login-container">
-    <div class="login-card">
+<div class="login-card">
+    <div class="mb-4">
+        <p class="page-kicker">Operator Enrollment</p>
+        <h1 class="panel-title fs-3">Create an account</h1>
+        <p class="muted-copy mb-0">Register an operator profile for dashboard access and event accountability.</p>
+    </div>
 
-        {% for error_message in error_messages %}
-        <div class="alert alert-danger" role="alert">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning" role="alert">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
 
-            {{ error_message }}
-        </div>
-        {% endfor %}
-
-
-
-        <form action="signup" method="post">
-            {% csrf_token %}
-
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" name="first_name" placeholder="Enter first name" required>
-                <label for="first_name"><i class="fas fa-user me-2"></i>First Name</label>
+    <form action="{% url 'signup' %}" method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First name" required>
+                    <label for="first_name"><i class="fas fa-user me-2"></i>First Name</label>
+                </div>
             </div>
-
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" name="last_name" placeholder="Enter last name" required>
-                <label for="last_name"><i class="fas fa-user me-2"></i>Last Name</label>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last name" required>
+                    <label for="last_name"><i class="fas fa-user me-2"></i>Last Name</label>
+                </div>
             </div>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" name="username" placeholder="Enter username" required>
-                <label for="username"><i class="fas fa-user me-2"></i>Username</label>
+            <div class="col-12">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                    <label for="username"><i class="fas fa-id-badge me-2"></i>Username</label>
+                </div>
             </div>
-
-            <div class="form-floating mb-3">
-                <input type="email" class="form-control" name="email" placeholder="name@example.com" required>
-                <label for="email"><i class="fas fa-envelope me-2"></i>Email Address</label>
+            <div class="col-12">
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                    <label for="email"><i class="fas fa-envelope me-2"></i>Email Address</label>
+                </div>
             </div>
-
-            <div class="form-floating password-field mb-3">
-                <input type="password" class="form-control" name="password" placeholder="Password" required>
-                <label for="password"><i class="fas fa-lock me-2"></i>Password</label>
-                <button type="button" class="password-toggle">
-                    <i class="fas fa-eye" id="passwordIcon"></i>
-                </button>
+            <div class="col-12">
+                <div class="form-floating password-field">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                    <label for="password"><i class="fas fa-lock me-2"></i>Password</label>
+                    <button type="button" class="password-toggle" aria-label="Show password">
+                        <i class="fas fa-eye" id="passwordIcon"></i>
+                    </button>
+                </div>
             </div>
-
-            <div class="form-floating password-field mb-3">
-                <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password"
-                    required>
-                <label for="confirm_password"><i class="fas fa-lock me-2"></i>Confirm Password</label>
+            <div class="col-12">
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
+                    <label for="confirm_password"><i class="fas fa-lock me-2"></i>Confirm Password</label>
+                </div>
             </div>
-
-            <button type="submit" class="btn btn-login w-100 mb-3">
-                <i class="fas fa-sign-in-alt me-2"></i>Sign Up
-            </button>
-        </form>
-        <form action="login">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-login w-100 mb-3">
-                <i class="fas fa-sign-in-alt me-2"></i>Login
-            </button>
-        </form>
-
-        <div class="divider">
-            <span>or continue with</span>
         </div>
 
-        <div class="social-login">
-            <a href="#" class="btn-social">
-                <i class="fab fa-google"></i>
-                Google
-            </a>
-            <a href="#" class="btn-social">
-                <i class="fab fa-facebook-f"></i>
-                Facebook
-            </a>
-        </div>
+        <button type="submit" class="btn btn-login w-100 mt-4">
+            <i class="fas fa-user-plus me-2"></i>Create Account
+        </button>
+    </form>
 
-        <div class="signup-link">
-            <p class="text mb-0">Have an account? <a href="login.html">Sign In now</a></p>
-        </div>
+    <div class="signup-link">
+        <p class="text-muted mb-0">Already have an account? <a href="{% url 'login' %}">Sign in</a></p>
     </div>
 </div>
 {% endblock %}

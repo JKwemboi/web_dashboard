@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}LionGuard Command{% endblock %}</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'icons/fontawesome/css/fontawesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'icons/fontawesome/css/brands.min.css' %}" rel="stylesheet">
+    <link href="{% static 'icons/fontawesome/css/solid.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/robot.css' %}" rel="stylesheet">
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body class="robot-app">
+    <div id="main-wrapper" class="d-flex">
+        <aside class="sidebar">
+            <div class="sidebar-header robot-brand">
+                <a href="{% url 'dashboard' %}" class="brand-lockup">
+                    <span class="brand-mark"><i class="fa-solid fa-shield-halved"></i></span>
+                    <span>
+                        <strong>LionGuard</strong>
+                        <small>Command Center</small>
+                    </span>
+                </a>
+            </div>
+
+            <div class="sidebar-body custom-scrollbar">
+                <ul class="sidebar-menu">
+                    <li class="sidebar-label">Operations</li>
+                    <li>
+                        <a href="{% url 'dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                            <i class="fa-solid fa-gauge-high"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'analytics' %}" class="sidebar-link {% if request.resolver_match.url_name == 'analytics' %}active{% endif %}">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <p>Analytics</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'map' %}" class="sidebar-link {% if request.resolver_match.url_name == 'map' %}active{% endif %}">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            <p>Live Map</p>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-label mt-4">Control</li>
+                    <li>
+                        <a href="{% url 'drone_control_page' %}" class="sidebar-link {% if request.resolver_match.url_name == 'drone_control_page' %}active{% endif %}">
+                            <i class="fa-solid fa-gamepad"></i>
+                            <p>Robot Control</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'requirements' %}" class="sidebar-link {% if request.resolver_match.url_name == 'requirements' %}active{% endif %}">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                            <p>Requirements</p>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-label mt-4">Administration</li>
+                    <li>
+                        <a href="{% url 'users' %}" class="sidebar-link {% if request.resolver_match.url_name == 'users' %}active{% endif %}">
+                            <i class="fa-solid fa-users-gear"></i>
+                            <p>Operators</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'settings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
+                            <i class="fa-solid fa-sliders"></i>
+                            <p>Settings</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <header class="header d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <button class="menu-toggle icon-button d-block d-lg-none" type="button" aria-label="Open navigation">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="search-container d-none d-md-block">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search detections, zones, operators">
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="header-status d-none d-lg-flex">
+                    <span class="live-dot"></span>
+                    <span>Robot Link Stable</span>
+                </div>
+                <a href="{% url 'requirements' %}" class="header-nav-item" title="Readiness requirements">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                </a>
+                <button class="header-nav-item border-0" id="themeToggle" type="button" title="Toggle theme">
+                    <span class="sun-icon"><i class="fa-solid fa-sun"></i></span>
+                    <span class="moon-icon d-none"><i class="fa-solid fa-moon"></i></span>
+                </button>
+                <div class="dropdown user-profile">
+                    <a class="d-flex align-items-center dropdown-toggle text-decoration-none" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{% static 'images/avatar-6.png' %}" class="user-avatar" alt="Operator avatar">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end mt-3">
+                        <li>
+                            <a class="dropdown-item py-2" href="{% url 'profile' %}">
+                                <i class="fa-solid fa-user text-success"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2" href="{% url 'settings' %}">
+                                <i class="fa-solid fa-gear text-info"></i>
+                                Settings
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a href="{% url 'logout' %}" class="dropdown-item py-2">
+                                <i class="fa-solid fa-right-from-bracket text-danger"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-wrapper">
+            <main class="main-content">
+                <div class="page-content">
+                    {% if messages %}
+                    <div class="mb-4">
+                        {% for message in messages %}
+                        <div class="alert alert-info mb-2" role="alert">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+            <footer class="footer robot-footer">
+                <span>LionGuard Command Center</span>
+                <span>Surveillance Robot Operations Console</span>
+            </footer>
+        </div>
+    </div>
+
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

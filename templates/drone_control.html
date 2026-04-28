@@ -1,148 +1,150 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base_app.html' %}
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Drone Control</title>
+{% block title %}Robot Control | LionGuard Command{% endblock %}
 
-        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-
-
-        <style>
-            body {
-                background: #0f172a;
-                color: #e2e8f0;
-                font-family: 'Segoe UI', sans-serif;
-            }
-
-            .control-container {
-                max-width: 900px;
-                margin: auto;
-                margin-top: 40px;
-            }
-
-            .card {
-                background: #020617;
-                border: 1px solid #1e293b;
-                border-radius: 16px;
-            }
-
-            .control-btn {
-                width: 70px;
-                height: 70px;
-                font-size: 24px;
-                margin: 5px;
-                border-radius: 12px;
-            }
-
-            .status-box {
-                background: #020617;
-                border: 1px solid #1e293b;
-                padding: 15px;
-                border-radius: 12px;
-                margin-bottom: 10px;
-            }
-        </style>
-    </head>
-    <script src="{% static 'js/drone.js' %}"></script>
-
-    <body>
-
-        <div class="container control-container">
-
-
-            <div class="container control-container">
-
-                <div class="d-flex justify-content-start mb-3">
-                    <a href="{% url 'dashboard' %}" class="btn btn-outline-light btn-sm">
-                        <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
-                    </a>
-                </div>
-
-                <div class="card p-4">
-                    <div class="card p-4 shadow-lg bg-dark text-white">
-                        <h3 class="mb-4 text-center">
-                            <i class="fas fa-drone me-2"></i> Drone Control & Live Feed
-                        </h3>
-                    </div>
-
-                    <div class="row">
-
-                        <!-- LEFT: LIVE VIDEO -->
-                        <div class="col-md-7">
-                            <h5>📡 Live Feed</h5>
-
-                            <div class="live-feed-box">
-                                <img src="/video_feed" id="videoFeed" class="w-100">
-                            </div>
-
-                            <div class="mt-2 text-end">
-                                <span class="badge bg-success">LIVE</span>
-                            </div>
-                        </div>
-
-                        <!-- RIGHT: CONTROLS -->
-                        <div class="col-md-5 text-center">
-
-                            <h5>🎮 Controls</h5>
-
-                            <!-- UP -->
-                            <button class="btn btn-success control-btn" onclick="sendCommand('up')">↑</button>
-
-                            <div>
-                                <button class="btn btn-success control-btn" onclick="sendCommand('left')">←</button>
-                                <button class="btn btn-danger control-btn" onclick="sendCommand('stop')">■</button>
-                                <button class="btn btn-success control-btn" onclick="sendCommand('right')">→</button>
-                            </div>
-
-                            <button class="btn btn-success control-btn" onclick="sendCommand('down')">↓</button>
-
-                            <div class="mt-4">
-                                <button class="btn btn-primary me-2" onclick="sendCommand('takeoff')">Take Off</button>
-                                <button class="btn btn-warning" onclick="sendCommand('land')">Land</button>
-                            </div>
-
-                            <hr>
-
-                            <!-- STATUS -->
-                            <div class="status-box">🔋 Battery: <span id="battery">85%</span></div>
-                            <div class="status-box">📡 Signal: <span id="signal">Strong</span></div>
-
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-
+{% block content %}
+<div class="page-header">
+    <p class="page-kicker">Manual Control</p>
+    <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+        <div>
+            <h1 class="page-title">Robot Control</h1>
+            <p class="page-subtitle">Operator command surface for movement, speed, camera position, and mission actions.</p>
         </div>
+        <a href="{% url 'dashboard' %}" class="btn-robot-secondary">
+            <i class="fa-solid fa-arrow-left"></i>
+            Dashboard
+        </a>
+    </div>
+</div>
 
-        <script>
-            function sendCommand(command) {
-                fetch("{% url 'drone_control' %}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRFToken": getCSRFToken()
-                    },
-                    body: JSON.stringify({ command: command })
-                })
-                    .then(res => res.json())
-                    .then(data => console.log(data));
-            }
+<div class="row g-4">
+    <div class="col-xl-8">
+        <section class="robot-card">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Live Operator Feed</h2>
+                    <p class="mb-0 muted-copy">Command view from the robot's primary camera.</p>
+                </div>
+                <span class="status-pill status-live"><span class="live-dot"></span> Live</span>
+            </div>
+            <div class="video-shell">
+                <img src="{% url 'video_feed' %}" id="videoFeed" alt="Robot live feed">
+                <div class="video-overlay">
+                    <span class="metric-pill"><i class="fa-solid fa-compass"></i> Heading 128 deg</span>
+                    <span class="metric-pill"><i class="fa-solid fa-gauge-high"></i> Speed 0.8 m/s</span>
+                    <span class="metric-pill"><i class="fa-solid fa-satellite-dish"></i> Link 94%</span>
+                </div>
+            </div>
+        </section>
+    </div>
 
-            function updateSpeed(value) {
-                sendCommand("speed_" + value);
-            }
+    <div class="col-xl-4">
+        <section class="robot-card h-100">
+            <div class="panel-header">
+                <h2 class="panel-title">Drive Controls</h2>
+                <span class="status-pill status-info" id="commandStatus">Ready</span>
+            </div>
+            <div class="p-3">
+                <div class="control-pad mb-4">
+                    <span></span>
+                    <button class="control-btn" type="button" onclick="sendCommand('forward')" title="Forward">
+                        <i class="fa-solid fa-arrow-up"></i>
+                    </button>
+                    <span></span>
+                    <button class="control-btn" type="button" onclick="sendCommand('left')" title="Left">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <button class="control-btn stop-btn" type="button" onclick="sendCommand('stop')" title="Stop">
+                        <i class="fa-solid fa-stop"></i>
+                    </button>
+                    <button class="control-btn" type="button" onclick="sendCommand('right')" title="Right">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <span></span>
+                    <button class="control-btn" type="button" onclick="sendCommand('reverse')" title="Reverse">
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </button>
+                    <span></span>
+                </div>
 
-            function getCSRFToken() {
-                return document.cookie.split('; ')
-                    .find(row => row.startsWith('csrftoken'))
-                    .split('=')[1];
-            }
-        </script>
+                <div class="action-row mb-4">
+                    <button class="btn-robot" type="button" onclick="sendCommand('start_patrol')">
+                        <i class="fa-solid fa-route"></i>
+                        Start Patrol
+                    </button>
+                    <button class="btn-robot-secondary" type="button" onclick="sendCommand('return_home')">
+                        <i class="fa-solid fa-house"></i>
+                        Return Home
+                    </button>
+                </div>
 
-    </body>
+                <label class="form-label" for="speedRange">Speed Limit</label>
+                <input type="range" class="form-range" id="speedRange" min="10" max="100" value="50" oninput="updateSpeed(this.value)">
 
-</html>
+                <label class="form-label mt-3" for="cameraTilt">Camera Tilt</label>
+                <input type="range" class="form-range" id="cameraTilt" min="-45" max="45" value="0" oninput="sendCommand('camera_tilt_' + this.value)">
+            </div>
+        </section>
+    </div>
+</div>
+
+<section class="stat-grid mt-4">
+    <div class="robot-card stat-tile">
+        <div class="stat-label">Battery</div>
+        <div class="stat-value">85%</div>
+        <div class="stat-note">Estimated 42 min remaining</div>
+    </div>
+    <div class="robot-card stat-tile">
+        <div class="stat-label">Network</div>
+        <div class="stat-value">94%</div>
+        <div class="stat-note">Command channel stable</div>
+    </div>
+    <div class="robot-card stat-tile">
+        <div class="stat-label">Obstacle Sensor</div>
+        <div class="stat-value">Clear</div>
+        <div class="stat-note">2.4 m forward clearance</div>
+    </div>
+    <div class="robot-card stat-tile">
+        <div class="stat-label">AI Detection</div>
+        <div class="stat-value">Active</div>
+        <div class="stat-note">Threat model monitoring feed</div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const commandUrl = "{% url 'drone_control' %}";
+
+    function getCSRFToken() {
+        const token = document.cookie.split('; ')
+            .find(row => row.startsWith('csrftoken='));
+        return token ? token.split('=')[1] : '';
+    }
+
+    function setCommandStatus(text, kind) {
+        const status = document.getElementById('commandStatus');
+        status.textContent = text;
+        status.className = `status-pill ${kind}`;
+    }
+
+    function sendCommand(command) {
+        setCommandStatus('Sending', 'status-warning');
+        fetch(commandUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: JSON.stringify({ command })
+        })
+            .then(response => response.json())
+            .then(() => setCommandStatus('Command Sent', 'status-safe'))
+            .catch(() => setCommandStatus('Command Failed', 'status-danger'));
+    }
+
+    function updateSpeed(value) {
+        sendCommand(`speed_${value}`);
+    }
+</script>
+{% endblock %}

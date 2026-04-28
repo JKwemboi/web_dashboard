@@ -1,0 +1,96 @@
+{% extends 'base_app.html' %}
+
+{% block title %}Requirements | LionGuard Command{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <p class="page-kicker">Professional Requirements</p>
+    <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+        <div>
+            <h1 class="page-title">Website and Operations Requirements</h1>
+            <p class="page-subtitle">Readiness criteria for a professional surveillance robot dashboard.</p>
+        </div>
+        <a href="{% url 'settings' %}" class="btn-robot-secondary">
+            <i class="fa-solid fa-sliders"></i>
+            Configure System
+        </a>
+    </div>
+</div>
+
+<section class="requirements-grid">
+    <article class="robot-card p-4">
+        <h2 class="form-section-title"><i class="fa-solid fa-video me-2 text-success"></i> Functional Requirements</h2>
+        <ul class="requirement-list">
+            <li><i class="fa-solid fa-check"></i><span>Display a real-time robot camera stream with a visible live state.</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Show AI detections, confidence, time, and location for operator review.</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Provide manual robot control with clear stop and return-home actions.</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Track robot GPS and recent detection locations on the live map.</span></li>
+        </ul>
+    </article>
+
+    <article class="robot-card p-4">
+        <h2 class="form-section-title"><i class="fa-solid fa-shield-halved me-2 text-info"></i> Security Requirements</h2>
+        <ul class="requirement-list">
+            <li><i class="fa-solid fa-check"></i><span>Restrict dashboard access to authenticated operators.</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Use CSRF protection on every command or account-changing action.</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Keep command controls behind role-aware operator accounts.</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Log threat events and preserve evidence images when enabled.</span></li>
+        </ul>
+    </article>
+
+    <article class="robot-card p-4">
+        <h2 class="form-section-title"><i class="fa-solid fa-gauge-high me-2 text-warning"></i> Performance Requirements</h2>
+        <ul class="requirement-list">
+            <li><i class="fa-solid fa-check"></i><span>Keep the video feed responsive on desktop and tablet screens.</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Refresh robot telemetry without blocking the interface.</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Handle missing camera, GPS, or detection data with clear fallbacks.</span></li>
+            <li><i class="fa-solid fa-check"></i><span>Use focused tables and cards so operators can scan quickly.</span></li>
+        </ul>
+    </article>
+</section>
+
+<section class="robot-card mt-4">
+    <div class="panel-header">
+        <h2 class="panel-title">Deployment Readiness Checklist</h2>
+        <span class="status-pill status-warning">Before Field Use</span>
+    </div>
+    <div class="table-responsive">
+        <table class="robot-table">
+            <thead>
+                <tr>
+                    <th>Area</th>
+                    <th>Requirement</th>
+                    <th>Acceptance Criteria</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Camera</td>
+                    <td>Stable video source configured</td>
+                    <td>Live feed renders continuously for at least 30 minutes.</td>
+                </tr>
+                <tr>
+                    <td>AI Detection</td>
+                    <td>Model confidence threshold validated</td>
+                    <td>Threat detections include label, confidence, location, and timestamp.</td>
+                </tr>
+                <tr>
+                    <td>Robot Control</td>
+                    <td>Emergency stop available</td>
+                    <td>Stop command is visible, immediate, and tested before patrol.</td>
+                </tr>
+                <tr>
+                    <td>Alerting</td>
+                    <td>Operator contact route configured</td>
+                    <td>Phone and email routes are saved and verified in settings.</td>
+                </tr>
+                <tr>
+                    <td>Security</td>
+                    <td>Access limited to authorized operators</td>
+                    <td>Inactive users cannot access command functions.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

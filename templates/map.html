@@ -1,145 +1,138 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base_app.html' %}
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Drone Live Map</title>
+{% block title %}Live Map | LionGuard Command{% endblock %}
 
-        <!-- Leaflet CSS -->
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+{% endblock %}
 
-        <style>
-            body {
-                margin: 0;
-                background: #0f172a;
-                color: white;
-            }
-
-            #map {
-                height: 100vh;
-                width: 100%;
-            }
-
-            .status-box {
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                background: #020617;
-                padding: 12px;
-                border-radius: 10px;
-                z-index: 1000;
-                font-size: 14px;
-            }
-        </style>
-    </head>
-
-    <body>
-
-        <div id="map"></div>
-
-        <div class="status-box">
-            🚁 Drone: <span id="coords">Loading...</span><br>
-            🦁 Detections: <span id="count">0</span>
+{% block content %}
+<div class="page-header">
+    <p class="page-kicker">Field Positioning</p>
+    <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+        <div>
+            <h1 class="page-title">Live Map</h1>
+            <p class="page-subtitle">Robot location, recent detections, and perimeter context in one mission view.</p>
         </div>
+        <a href="{% url 'dashboard' %}" class="btn-robot-secondary">
+            <i class="fa-solid fa-arrow-left"></i>
+            Dashboard
+        </a>
+    </div>
+</div>
 
-        <!-- Leaflet JS -->
-        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<section class="robot-card map-shell position-relative">
+    <div class="map-overlay-card">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h2 class="panel-title">Mission Tracking</h2>
+            <span class="status-pill status-live">Live</span>
+        </div>
+        <div class="telemetry-list">
+            <div class="telemetry-item">
+                <span>Robot GPS</span>
+                <strong id="coords">Loading</strong>
+            </div>
+            <div class="telemetry-item">
+                <span>Detections</span>
+                <strong id="count">0</strong>
+            </div>
+            <div class="telemetry-item">
+                <span>Refresh</span>
+                <strong>3 sec</strong>
+            </div>
+        </div>
+    </div>
+    <div id="missionMap"></div>
+</section>
+{% endblock %}
 
-        <script>
-            // 🌍 INIT MAP
-            let map = L.map('map').setView([-1.2921, 36.8219], 13);
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<script>
+    const robotLocationUrl = "{% url 'drone_location' %}";
+    const detectionLocationUrl = "{% url 'detection_locations' %}";
+    const startPosition = [-1.2921, 36.8219];
+    const map = L.map('missionMap', { zoomControl: false }).setView(startPosition, 14);
 
-            // 🌍 TILE LAYER
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap'
-            }).addTo(map);
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-            // 🚁 DRONE ICON
-            let droneIcon = L.icon({
-                iconUrl: "https://cdn-icons-png.flaticon.com/512/149/149060.png",
-                iconSize: [40, 40]
+    const icon = (kind, symbol) => L.divIcon({
+        className: '',
+        html: `<span class="map-marker marker-${kind}"><i class="fa-solid ${symbol}"></i></span>`,
+        iconSize: [34, 34],
+        iconAnchor: [17, 17]
+    });
+
+    const robotMarker = L.marker(startPosition, {
+        icon: icon('robot', 'fa-location-crosshairs')
+    }).addTo(map).bindPopup('Surveillance robot');
+
+    let detectionLayers = [];
+
+    function updateRobot() {
+        fetch(robotLocationUrl)
+            .then(response => response.json())
+            .then(data => {
+                const lat = Number(data.lat);
+                const lng = Number(data.lng);
+                if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+                robotMarker.setLatLng([lat, lng]);
+                map.panTo([lat, lng], { animate: true, duration: .6 });
+                document.getElementById('coords').innerText = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+            })
+            .catch(() => {
+                document.getElementById('coords').innerText = 'Unavailable';
             });
+    }
 
-            // 🦁 ICONS
-            let lionIcon = L.icon({
-                iconUrl: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
-                iconSize: [35, 35]
-            });
+    function loadDetections() {
+        detectionLayers.forEach(layer => map.removeLayer(layer));
+        detectionLayers = [];
 
-            let normalIcon = L.icon({
-                iconUrl: "https://cdn-icons-png.flaticon.com/512/190/190411.png",
-                iconSize: [30, 30]
-            });
+        fetch(detectionLocationUrl)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('count').innerText = data.length;
 
-            // 🚁 DRONE MARKER
-            let droneMarker = L.marker([-1.2921, 36.8219], { icon: droneIcon }).addTo(map);
+                data.forEach(item => {
+                    const lat = Number(item.lat);
+                    const lng = Number(item.lng);
+                    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
 
-            // 🧠 STORE DETECTIONS
-            let detectionMarkers = [];
-
-            // 🚁 UPDATE DRONE LOCATION
-            function updateDrone() {
-                fetch("/drone-location/")
-                    .then(res => res.json())
-                    .then(data => {
-
-                        let lat = data.lat;
-                        let lng = data.lng;
-
-                        droneMarker.setLatLng([lat, lng]);
-                        map.setView([lat, lng]);
-
-                        document.getElementById("coords").innerText =
-                            lat.toFixed(5) + ", " + lng.toFixed(5);
-                    });
-            }
-
-            // 🦁 LOAD DETECTIONS
-            function loadDetections() {
-
-                // remove old markers
-                detectionMarkers.forEach(m => map.removeLayer(m));
-                detectionMarkers = [];
-
-                fetch("/detection-locations/")
-                    .then(res => res.json())
-                    .then(data => {
-
-                        document.getElementById("count").innerText = data.length;
-
-                        data.forEach(d => {
-
-                            let icon = d.is_lion ? lionIcon : normalIcon;
-
-                            let marker = L.marker([d.lat, d.lng], { icon: icon })
-                                .addTo(map)
-                                .bindPopup(`
-                        <b>${d.is_lion ? "🦁 Lion Detected" : "✅ No Threat"}</b><br>
-                        Time: ${d.time}<br>
-                        Confidence: ${d.confidence}%
+                    const isThreat = Boolean(item.is_lion);
+                    const marker = L.marker([lat, lng], {
+                        icon: icon(isThreat ? 'threat' : 'safe', isThreat ? 'fa-triangle-exclamation' : 'fa-check')
+                    }).addTo(map).bindPopup(`
+                        <strong>${isThreat ? 'Threat Detected' : 'Safe Event'}</strong><br>
+                        Time: ${item.time}<br>
+                        Confidence: ${item.confidence || '--'}%
                     `);
 
-                            // 🔴 danger circle
-                            if (d.is_lion) {
-                                L.circle([d.lat, d.lng], {
-                                    color: 'red',
-                                    radius: 200
-                                }).addTo(map);
-                            }
+                    detectionLayers.push(marker);
 
-                            detectionMarkers.push(marker);
-                        });
+                    if (isThreat) {
+                        const circle = L.circle([lat, lng], {
+                            color: '#ef4444',
+                            fillColor: '#ef4444',
+                            fillOpacity: .08,
+                            radius: 200
+                        }).addTo(map);
+                        detectionLayers.push(circle);
+                    }
+                });
+            })
+            .catch(() => {
+                document.getElementById('count').innerText = '0';
+            });
+    }
 
-                    });
-            }
-
-            // 🔄 AUTO REFRESH
-            setInterval(updateDrone, 2000);
-            setInterval(loadDetections, 3000);
-
-        </script>
-
-    </body>
-
-</html>
+    updateRobot();
+    loadDetections();
+    setInterval(updateRobot, 2000);
+    setInterval(loadDetections, 3000);
+</script>
+{% endblock %}

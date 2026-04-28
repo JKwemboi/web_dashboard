@@ -1,175 +1,121 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base_app.html' %}
 
-    <head>
-        <meta charset="UTF-8">
-        <title>User Admin Panel</title>
-        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+{% block title %}Operators | LionGuard Command{% endblock %}
 
-        <style>
-            body {
-                background: #0f172a;
-                color: #e2e8f0;
-            }
+{% block content %}
+<div class="page-header">
+    <p class="page-kicker">Access Management</p>
+    <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+        <div>
+            <h1 class="page-title">Operators</h1>
+            <p class="page-subtitle">Manage command center users, roles, and active access status.</p>
+        </div>
+        <a href="{% url 'dashboard' %}" class="btn-robot-secondary">
+            <i class="fa-solid fa-arrow-left"></i>
+            Dashboard
+        </a>
+    </div>
+</div>
 
-            .card {
-                background: #020617;
-                border: 1px solid #1e293b;
-                border-radius: 12px;
-            }
-
-            .table {
-                color: #e2e8f0;
-            }
-
-            .table thead {
-                background: #1e293b;
-            }
-
-            .btn-sm {
-                border-radius: 8px;
-            }
-
-            .search-box {
-                max-width: 300px;
-            }
-        </style>
-    </head>
-
-    <body>
-
-        <div class="container mt-4">
-
-            <div class="d-flex justify-content-start mb-3">
-                <a href="{% url 'dashboard' %}" class="btn btn-outline-light btn-sm">
-                    <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
-                </a>
-            </div>
-
-            <div class="card p-4">
-
-                <!-- HEADER -->
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h3>👥 User Management</h3>
-
-                    <!-- SEARCH -->
-                    <input type="text" id="searchInput" class="form-control search-box" placeholder="Search users...">
-                </div>
-
-                <!-- FILTER -->
-                <div class="mb-3">
-                    <select id="filterStatus" class="form-select w-auto">
-                        <option value="">All Users</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-
-                <!-- TABLE -->
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="userTable">
-                        {% for user in users %}
-                        <tr data-status="{% if user.is_active %}active{% else %}inactive{% endif %}"
-                            data-role="{% if user.is_superuser %}admin{% else %}user{% endif %}">
-
-                            <td>{{ user.id }}</td>
-                            <td>{{ user.username }}</td>
-                            <td>{{ user.email }}</td>
-
-                            <td>
-                                {% if user.is_superuser %}
-                                <span class="badge bg-danger">Admin</span>
-                                {% elif user.is_staff %}
-                                <span class="badge bg-warning text-dark">Staff</span>
-                                {% else %}
-                                <span class="badge bg-secondary">User</span>
-                                {% endif %}
-                            </td>
-
-                            <td>
-                                {% if user.is_active %}
-                                <span class="badge bg-success">Active</span>
-                                {% else %}
-                                <span class="badge bg-secondary">Inactive</span>
-                                {% endif %}
-                            </td>
-
-                            <td>
-                                <!-- TOGGLE ACTIVE -->
-                                <button class="btn btn-sm btn-warning" onclick="toggleUser({{ user.id }})">
+<section class="robot-card">
+    <div class="panel-header">
+        <h2 class="panel-title">User Directory</h2>
+        <div class="action-row">
+            <input type="text" id="searchInput" class="form-control form-control-sm robot-input" placeholder="Search users">
+            <select id="filterStatus" class="form-select form-select-sm robot-input" aria-label="Filter users">
+                <option value="">All Users</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="robot-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Operator</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="userTable">
+                {% for user in users %}
+                <tr data-status="{% if user.is_active %}active{% else %}inactive{% endif %}" data-role="{% if user.is_superuser %}admin{% else %}user{% endif %}">
+                    <td>{{ user.id }}</td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="brand-mark" style="width:34px;height:34px;"><i class="fa-solid fa-user"></i></span>
+                            <strong>{{ user.username }}</strong>
+                        </div>
+                    </td>
+                    <td>{{ user.email|default:"No email" }}</td>
+                    <td>
+                        {% if user.is_superuser %}
+                        <span class="status-pill status-danger">Admin</span>
+                        {% elif user.is_staff %}
+                        <span class="status-pill status-warning">Staff</span>
+                        {% else %}
+                        <span class="status-pill status-info">Operator</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if user.is_active %}
+                        <span class="status-pill status-safe">Active</span>
+                        {% else %}
+                        <span class="status-pill status-warning">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="action-row">
+                            <form method="POST" action="{% url 'toggle_user' user.id %}">
+                                {% csrf_token %}
+                                <button class="btn-robot-secondary" type="submit">
+                                    <i class="fa-solid fa-power-off"></i>
                                     Toggle
                                 </button>
-
-                                <!-- DELETE -->
-                                <button class="btn btn-sm btn-danger" onclick="deleteUser({{ user.id }})">
+                            </form>
+                            <form method="POST" action="{% url 'delete_user' user.id %}" onsubmit="return confirm('Delete this operator?');">
+                                {% csrf_token %}
+                                <button class="btn-robot-danger" type="submit">
+                                    <i class="fa-solid fa-trash"></i>
                                     Delete
                                 </button>
-                            </td>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-state">No users are available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
 
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+{% block scripts %}
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const filterStatus = document.getElementById('filterStatus');
 
-            </div>
+    function filterUsers() {
+        const search = searchInput.value.toLowerCase();
+        const filter = filterStatus.value;
 
-        </div>
+        document.querySelectorAll('#userTable tr').forEach(row => {
+            const matchesSearch = row.innerText.toLowerCase().includes(search);
+            const matchesFilter = !filter || row.dataset.status === filter || row.dataset.role === filter;
+            row.style.display = matchesSearch && matchesFilter ? '' : 'none';
+        });
+    }
 
-        <script>
-            // 🔍 SEARCH
-            document.getElementById('searchInput').addEventListener('keyup', function () {
-                let value = this.value.toLowerCase();
-                document.querySelectorAll("#userTable tr").forEach(row => {
-                    row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
-                });
-            });
-
-            // 🎛️ FILTER
-            document.getElementById('filterStatus').addEventListener('change', function () {
-                let filter = this.value;
-
-                document.querySelectorAll("#userTable tr").forEach(row => {
-                    let status = row.dataset.status;
-                    let role = row.dataset.role;
-
-                    if (!filter ||
-                        status === filter ||
-                        role === filter) {
-                        row.style.display = "";
-                    } else {
-                        row.style.display = "none";
-                    }
-                });
-            });
-
-            // 🔁 TOGGLE ACTIVE
-            function toggleUser(userId) {
-                fetch(`/toggle-user/${userId}/`)
-                    .then(() => location.reload());
-            }
-
-            // 🗑️ DELETE USER
-            function deleteUser(userId) {
-                if (confirm("Delete this user?")) {
-                    fetch(`/delete-user/${userId}/`)
-                        .then(() => location.reload());
-                }
-            }
-        </script>
-
-    </body>
-
-</html>
+    searchInput.addEventListener('input', filterUsers);
+    filterStatus.addEventListener('change', filterUsers);
+</script>
+{% endblock %}

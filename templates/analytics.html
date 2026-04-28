@@ -1,147 +1,154 @@
+{% extends 'base_app.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Analytics</title>
+{% block title %}Analytics | LionGuard Command{% endblock %}
 
-        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-        <style>
-            body {
-                background: #0f172a;
-                color: #e2e8f0;
-            }
-
-            .card {
-                background: #020617;
-                border: 1px solid #1e293b;
-                border-radius: 12px;
-            }
-
-            .stat-box {
-                text-align: center;
-                padding: 15px;
-            }
-
-            canvas {
-                max-height: 300px;
-            }
-        </style>
-    </head>
-
-    <body>
-
-        <div class="container mt-4">
-
-            <div class="d-flex justify-content-start mb-3">
-                <a href="{% url 'dashboard' %}" class="btn btn-outline-light btn-sm">
-                    <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
-                </a>
-            </div>
-
-            <h3 class="mb-4">📊 System Analytics</h3>
-
-
-
-            <div class="row mb-4">
-
-                <div class="col-md-4">
-                    <div class="card stat-box">
-                        <h5>Total Detections</h5>
-                        <h2>{{ total }}</h2>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card stat-box">
-                        <h5 class="text-bold">🦁 Lion Detections</h5>
-                        <h2 class="text-danger">{{ lions }}</h2>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card stat-box">
-                        <h5>✅ Safe Events</h5>
-                        <h2 class="text-success">{{ normal }}</h2>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CHARTS -->
-            <div class="row">
-
-                <!-- LINE CHART -->
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <h5>📈 Lion Detection Trend</h5>
-                        <canvas id="trendChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- PIE CHART -->
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <h5>📊 Detection Distribution</h5>
-                        <canvas id="pieChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- HOTSPOTS -->
-            <div class="card mt-4 p-3">
-                <h5> High Activity Zones</h5>
-
-                <table class="table table-dark table-striped mt-3">
-                    <thead>
-                        <tr>
-                            <th>Location</th>
-                            <th>Detections</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for zone in zones %}
-                        <tr>
-                            <td>{{ zone.location }}</td>
-                            <td>{{ zone.count }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+{% block content %}
+<div class="page-header">
+    <p class="page-kicker">Detection Intelligence</p>
+    <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+        <div>
+            <h1 class="page-title">Analytics</h1>
+            <p class="page-subtitle">Trend, distribution, and hotspot reporting for surveillance robot detections.</p>
         </div>
+        <a href="{% url 'dashboard' %}" class="btn-robot-secondary">
+            <i class="fa-solid fa-arrow-left"></i>
+            Dashboard
+        </a>
+    </div>
+</div>
 
-        <script>
-            // 📈 LINE CHART
-            new Chart(document.getElementById('trendChart'),
-                {
-                    type: 'line',
-                    data: {
-                        labels: {{ dates | safe }},
-                datasets :
-                [{
-                    label: 'Lion Detections',
-                    data: {{ counts | safe }},
+<section class="stat-grid mb-4">
+    <div class="robot-card stat-tile">
+        <div class="stat-label">Total Detections</div>
+        <div class="stat-value">{{ total|default:"0" }}</div>
+        <div class="stat-note">All stored robot events</div>
+    </div>
+    <div class="robot-card stat-tile">
+        <div class="stat-label">Threat Events</div>
+        <div class="stat-value text-danger">{{ lions|default:"0" }}</div>
+        <div class="stat-note">Events requiring attention</div>
+    </div>
+    <div class="robot-card stat-tile">
+        <div class="stat-label">Safe Events</div>
+        <div class="stat-value text-success">{{ normal|default:"0" }}</div>
+        <div class="stat-note">Normal environment readings</div>
+    </div>
+    <div class="robot-card stat-tile">
+        <div class="stat-label">Model State</div>
+        <div class="stat-value">Armed</div>
+        <div class="stat-note">YOLO detection pipeline ready</div>
+    </div>
+</section>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <section class="robot-card h-100">
+            <div class="panel-header">
+                <h2 class="panel-title">Seven-Day Threat Trend</h2>
+                <span class="status-pill status-info">Daily</span>
+            </div>
+            <div class="p-3">
+                <canvas id="trendChart" height="150"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-5">
+        <section class="robot-card h-100">
+            <div class="panel-header">
+                <h2 class="panel-title">Detection Distribution</h2>
+                <span class="status-pill status-safe">Threat vs Safe</span>
+            </div>
+            <div class="p-3">
+                <canvas id="pieChart" height="210"></canvas>
+            </div>
+        </section>
+    </div>
+</div>
+
+<section class="robot-card mt-4">
+    <div class="panel-header">
+        <h2 class="panel-title">High Activity Zones</h2>
+        <span class="status-pill status-warning">Top 5</span>
+    </div>
+    <div class="table-responsive">
+        <table class="robot-table">
+            <thead>
+                <tr>
+                    <th>Location</th>
+                    <th>Detections</th>
+                    <th>Operational Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for zone in zones %}
+                <tr>
+                    <td>{{ zone.location|default:"Unknown" }}</td>
+                    <td>{{ zone.count }}</td>
+                    <td>Increase patrol coverage and verify camera angle.</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="empty-state">No hotspot data is available yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'plugin/chart/chart.js' %}"></script>
+<script>
+    const chartText = getComputedStyle(document.documentElement).getPropertyValue('--robot-text').trim() || '#e5edf8';
+    const chartMuted = getComputedStyle(document.documentElement).getPropertyValue('--robot-muted').trim() || '#9aa9bd';
+    const labels = {{ dates|safe|default:"[]" }};
+    const counts = {{ counts|safe|default:"[]" }};
+    const threatTotal = Number('{{ lions|default:"0" }}');
+    const safeTotal = Number('{{ normal|default:"0" }}');
+
+    if (window.Chart) {
+        new Chart(document.getElementById('trendChart'), {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Threat detections',
+                    data: counts,
+                    borderColor: '#21c55d',
+                    backgroundColor: 'rgba(33, 197, 93, .14)',
                     borderWidth: 2,
-                    fill: false
-                                                }]
-                        }
-                });
+                    tension: .35,
+                    fill: true
+                }]
+            },
+            options: {
+                plugins: { legend: { labels: { color: chartText } } },
+                scales: {
+                    x: { ticks: { color: chartMuted }, grid: { color: 'rgba(154,169,189,.12)' } },
+                    y: { beginAtZero: true, ticks: { color: chartMuted, precision: 0 }, grid: { color: 'rgba(154,169,189,.12)' } }
+                }
+            }
+        });
 
-            // 📊 PIE CHART
-            new Chart(document.getElementById('pieChart'), {
-                type: 'pie',
-                data: {
-                    labels: ['Lion', 'Safe'],
-                    datasets: [{
-                        data: [{{ lions }}, {{ normal }}]
-            }]
+        new Chart(document.getElementById('pieChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Threat', 'Safe'],
+                datasets: [{
+                    data: [threatTotal, safeTotal],
+                    backgroundColor: ['#ef4444', '#21c55d'],
+                    borderColor: '#111827',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                cutout: '62%',
+                plugins: { legend: { labels: { color: chartText } } }
+            }
+        });
     }
-});
-        </script>
-
-    </body>
-
-</html>
+</script>
+{% endblock %}
