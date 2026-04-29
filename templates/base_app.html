@@ -64,20 +64,23 @@
                             <p>Requirements</p>
                         </a>
                     </li>
-
+                    {% if user.is_superuser %}
                     <li class="sidebar-label mt-4">Administration</li>
+                    
                     <li>
                         <a href="{% url 'users' %}" class="sidebar-link {% if request.resolver_match.url_name == 'users' %}active{% endif %}">
                             <i class="fa-solid fa-users-gear"></i>
                             <p>Operators</p>
                         </a>
                     </li>
+                    
                     <li>
                         <a href="{% url 'settings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
                             <i class="fa-solid fa-sliders"></i>
                             <p>Settings</p>
                         </a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </aside>
