@@ -126,3 +126,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# Optional endpoint for forwarding movement commands to the ESP32.
+# Example: http://192.168.4.1/command
+ESP32_COMMAND_URL = os.environ.get('ESP32_COMMAND_URL', '')

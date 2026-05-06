@@ -49,7 +49,7 @@
 {% block scripts %}
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 <script>
-    const robotLocationUrl = "{% url 'drone_location' %}";
+    const robotLocationUrl = "{% url 'robot_location' %}";
     const detectionLocationUrl = "{% url 'detection_locations' %}";
     const startPosition = [-1.2921, 36.8219];
     const map = L.map('missionMap', { zoomControl: false }).setView(startPosition, 14);

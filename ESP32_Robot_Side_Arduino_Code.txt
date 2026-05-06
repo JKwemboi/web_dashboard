@@ -1,0 +1,498 @@
+/*
+  ESP32 Robot Side Code for LionGuard Web Dashboard
+  -------------------------------------------------
+  What this sketch does:
+  - Connects an ESP32 robot to WiFi.
+  - Starts an HTTP server on the ESP32.
+  - Accepts movement commands from your Django web dashboard.
+  - Controls two DC motors through a motor driver such as L298N, L9110S, or TB6612FNG.
+  - Uses an HC-SR04 ultrasonic sensor for front obstacle avoidance.
+
+  Dashboard command format:
+    POST http://ESP32_IP_ADDRESS/command
+    Content-Type: application/json
+    Body: {"command":"forward"}
+
+  Your current Django dashboard accepts:
+    forward, backward, left, right, stop
+
+  In Django settings, set:
+    ESP32_COMMAND_URL = "http://ESP32_IP_ADDRESS/command"
+
+  Or in PowerShell before running Django:
+    $env:ESP32_COMMAND_URL="http://ESP32_IP_ADDRESS/command"
+    python manage.py runserver
+
+  Important wiring notes:
+  - Motor driver GND and ESP32 GND must be connected together.
+  - Use an external motor battery. Do not power motors directly from the ESP32.
+  - HC-SR04 Echo is usually 5V. ESP32 pins are 3.3V only.
+    Use a voltage divider or level shifter on the Echo pin.
+  - Change the pin numbers below if your robot is wired differently.
+*/
+
+#include <WiFi.h>
+#include <WebServer.h>
+#include <ESPmDNS.h>
+#include <esp_arduino_version.h>
+
+// -------------------- WiFi Settings --------------------
+// Put your WiFi name and password here.
+const char* WIFI_SSID = "YOUR_WIFI_NAME";
+const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
+
+// If normal WiFi fails, the ESP32 creates this fallback hotspot.
+const char* FALLBACK_AP_SSID = "LionGuard-Robot";
+const char* FALLBACK_AP_PASSWORD = "12345678";
+
+// Optional local name. Try http://lionguard-robot.local/status on some networks.
+const char* MDNS_NAME = "lionguard-robot";
+
+// -------------------- Motor Driver Pins --------------------
+// Left motor
+const int LEFT_IN1 = 26;
+const int LEFT_IN2 = 27;
+const int LEFT_PWM = 25;
+
+// Right motor
+const int RIGHT_IN1 = 32;
+const int RIGHT_IN2 = 33;
+const int RIGHT_PWM = 14;
+
+// PWM settings
+const int LEFT_PWM_CHANNEL = 0;
+const int RIGHT_PWM_CHANNEL = 1;
+const int PWM_FREQUENCY = 20000;
+const int PWM_RESOLUTION_BITS = 8;
+const int PWM_MAX = 255;
+
+// -------------------- Ultrasonic Sensor Pins --------------------
+const int ULTRASONIC_TRIG = 18;
+const int ULTRASONIC_ECHO = 19;
+
+// -------------------- Status LED --------------------
+const int STATUS_LED = 2;
+
+// -------------------- Robot Behavior Settings --------------------
+const int DEFAULT_SPEED = 180;       // 0 to 255
+const int TURN_SPEED = 165;          // 0 to 255
+const int BACKWARD_SPEED = 155;      // 0 to 255
+
+const int OBSTACLE_STOP_CM = 25;     // Stop/avoid if obstacle is nearer than this
+const int OBSTACLE_CLEAR_CM = 35;    // Clear obstacle state after distance is above this
+
+const unsigned long SENSOR_READ_INTERVAL_MS = 80;
+const unsigned long COMMAND_TIMEOUT_MS = 5000;  // Safety stop if no new command arrives
+
+const unsigned long AVOID_REVERSE_MS = 350;
+const unsigned long AVOID_TURN_MS = 520;
+
+// Set true if you want the robot to continue forward after avoiding an obstacle.
+// Set false if you want it to stop and wait for another dashboard command.
+const bool AUTO_RESUME_AFTER_AVOIDANCE = false;
+
+// -------------------- Web Server --------------------
+WebServer server(80);
+
+String activeCommand = "stop";
+unsigned long lastCommandMs = 0;
+unsigned long lastSensorReadMs = 0;
+int lastDistanceCm = 999;
+bool obstacleActive = false;
+
+enum AvoidState {
+  AVOID_IDLE,
+  AVOID_REVERSING,
+  AVOID_TURNING
+};
+
+AvoidState avoidState = AVOID_IDLE;
+unsigned long avoidStateUntilMs = 0;
+
+// -------------------- PWM Compatibility --------------------
+// Arduino-ESP32 core v3 changed the LEDC API. These helpers support v2 and v3.
+void setupPwmPin(int pin, int channel) {
+#if ESP_ARDUINO_VERSION_MAJOR >= 3
+  ledcAttach(pin, PWM_FREQUENCY, PWM_RESOLUTION_BITS);
+#else
+  ledcSetup(channel, PWM_FREQUENCY, PWM_RESOLUTION_BITS);
+  ledcAttachPin(pin, channel);
+#endif
+}
+
+void writePwmPin(int pin, int channel, int duty) {
+  duty = constrain(duty, 0, PWM_MAX);
+#if ESP_ARDUINO_VERSION_MAJOR >= 3
+  ledcWrite(pin, duty);
+#else
+  ledcWrite(channel, duty);
+#endif
+}
+
+// -------------------- Motor Control --------------------
+void setMotor(int in1, int in2, int pwmPin, int pwmChannel, int speedValue) {
+  speedValue = constrain(speedValue, -PWM_MAX, PWM_MAX);
+  int duty = abs(speedValue);
+
+  if (speedValue > 0) {
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+  } else if (speedValue < 0) {
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
+  } else {
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
+  }
+
+  writePwmPin(pwmPin, pwmChannel, duty);
+}
+
+void driveTank(int leftSpeed, int rightSpeed) {
+  setMotor(LEFT_IN1, LEFT_IN2, LEFT_PWM, LEFT_PWM_CHANNEL, leftSpeed);
+  setMotor(RIGHT_IN1, RIGHT_IN2, RIGHT_PWM, RIGHT_PWM_CHANNEL, rightSpeed);
+}
+
+void stopMotors() {
+  driveTank(0, 0);
+}
+
+void moveForward() {
+  driveTank(DEFAULT_SPEED, DEFAULT_SPEED);
+}
+
+void moveBackward() {
+  driveTank(-BACKWARD_SPEED, -BACKWARD_SPEED);
+}
+
+void turnLeft() {
+  driveTank(-TURN_SPEED, TURN_SPEED);
+}
+
+void turnRight() {
+  driveTank(TURN_SPEED, -TURN_SPEED);
+}
+
+// -------------------- Ultrasonic Distance --------------------
+int readDistanceCm() {
+  digitalWrite(ULTRASONIC_TRIG, LOW);
+  delayMicroseconds(2);
+  digitalWrite(ULTRASONIC_TRIG, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(ULTRASONIC_TRIG, LOW);
+
+  unsigned long duration = pulseIn(ULTRASONIC_ECHO, HIGH, 25000UL);
+  if (duration == 0) {
+    return 999;
+  }
+
+  float distanceCm = (duration * 0.0343f) / 2.0f;
+  return (int)distanceCm;
+}
+
+void updateObstacleSensor() {
+  unsigned long now = millis();
+  if (now - lastSensorReadMs < SENSOR_READ_INTERVAL_MS) {
+    return;
+  }
+
+  lastSensorReadMs = now;
+  lastDistanceCm = readDistanceCm();
+
+  if (lastDistanceCm <= OBSTACLE_STOP_CM) {
+    obstacleActive = true;
+  } else if (lastDistanceCm >= OBSTACLE_CLEAR_CM) {
+    obstacleActive = false;
+  }
+}
+
+// -------------------- Obstacle Avoidance --------------------
+void startAvoidance() {
+  avoidState = AVOID_REVERSING;
+  avoidStateUntilMs = millis() + AVOID_REVERSE_MS;
+  moveBackward();
+}
+
+void runAvoidance() {
+  unsigned long now = millis();
+
+  if (avoidState == AVOID_IDLE) {
+    return;
+  }
+
+  if (avoidState == AVOID_REVERSING) {
+    moveBackward();
+    if (now >= avoidStateUntilMs) {
+      avoidState = AVOID_TURNING;
+      avoidStateUntilMs = now + AVOID_TURN_MS;
+      turnRight();
+    }
+    return;
+  }
+
+  if (avoidState == AVOID_TURNING) {
+    turnRight();
+    if (now >= avoidStateUntilMs) {
+      avoidState = AVOID_IDLE;
+      stopMotors();
+
+      if (AUTO_RESUME_AFTER_AVOIDANCE) {
+        activeCommand = "forward";
+        lastCommandMs = now;
+      } else {
+        activeCommand = "stop";
+      }
+    }
+  }
+}
+
+// -------------------- Command Handling --------------------
+bool isAllowedCommand(const String& command) {
+  return command == "forward" ||
+         command == "backward" ||
+         command == "left" ||
+         command == "right" ||
+         command == "stop";
+}
+
+String commandFromBody(String body) {
+  body.trim();
+  body.toLowerCase();
+
+  if (body.indexOf("forward") >= 0) return "forward";
+  if (body.indexOf("backward") >= 0) return "backward";
+  if (body.indexOf("left") >= 0) return "left";
+  if (body.indexOf("right") >= 0) return "right";
+  if (body.indexOf("stop") >= 0) return "stop";
+
+  return "";
+}
+
+void applyCommand(const String& command) {
+  activeCommand = command;
+  lastCommandMs = millis();
+  avoidState = AVOID_IDLE;
+
+  if (command == "stop") {
+    stopMotors();
+  } else if (command == "forward") {
+    if (obstacleActive) {
+      startAvoidance();
+    } else {
+      moveForward();
+    }
+  } else if (command == "backward") {
+    moveBackward();
+  } else if (command == "left") {
+    turnLeft();
+  } else if (command == "right") {
+    turnRight();
+  }
+}
+
+void addCorsHeaders() {
+  server.sendHeader("Access-Control-Allow-Origin", "*");
+  server.sendHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  server.sendHeader("Access-Control-Allow-Headers", "Content-Type");
+}
+
+void handleOptions() {
+  addCorsHeaders();
+  server.send(204);
+}
+
+void handleCommand() {
+  addCorsHeaders();
+
+  String command = server.arg("command");
+  if (command.length() == 0 && server.hasArg("plain")) {
+    command = commandFromBody(server.arg("plain"));
+  }
+
+  command.trim();
+  command.toLowerCase();
+
+  if (!isAllowedCommand(command)) {
+    server.send(
+      400,
+      "application/json",
+      "{\"status\":\"error\",\"message\":\"unsupported command\",\"allowed_commands\":[\"forward\",\"backward\",\"left\",\"right\",\"stop\"]}"
+    );
+    return;
+  }
+
+  applyCommand(command);
+
+  String response = "{";
+  response += "\"status\":\"ok\",";
+  response += "\"command\":\"" + command + "\",";
+  response += "\"distance_cm\":" + String(lastDistanceCm) + ",";
+  response += "\"obstacle\":" + String(obstacleActive ? "true" : "false");
+  response += "}";
+
+  server.send(200, "application/json", response);
+}
+
+void handleStatus() {
+  addCorsHeaders();
+
+  String ipAddress = WiFi.status() == WL_CONNECTED
+                       ? WiFi.localIP().toString()
+                       : WiFi.softAPIP().toString();
+
+  String response = "{";
+  response += "\"status\":\"online\",";
+  response += "\"ip\":\"" + ipAddress + "\",";
+  response += "\"command\":\"" + activeCommand + "\",";
+  response += "\"distance_cm\":" + String(lastDistanceCm) + ",";
+  response += "\"obstacle\":" + String(obstacleActive ? "true" : "false") + ",";
+  response += "\"avoidance_active\":" + String(avoidState == AVOID_IDLE ? "false" : "true");
+  response += "}";
+
+  server.send(200, "application/json", response);
+}
+
+void handleRoot() {
+  addCorsHeaders();
+  server.send(
+    200,
+    "text/plain",
+    "LionGuard ESP32 robot is online. Use POST /command with JSON body {\"command\":\"forward\"}. Use GET /status for robot status."
+  );
+}
+
+void handleNotFound() {
+  addCorsHeaders();
+  server.send(404, "application/json", "{\"status\":\"error\",\"message\":\"not found\"}");
+}
+
+// -------------------- WiFi Setup --------------------
+void connectToWiFi() {
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+  Serial.print("Connecting to WiFi");
+  unsigned long startAttemptMs = millis();
+
+  while (WiFi.status() != WL_CONNECTED && millis() - startAttemptMs < 15000) {
+    Serial.print(".");
+    digitalWrite(STATUS_LED, !digitalRead(STATUS_LED));
+    delay(300);
+  }
+
+  Serial.println();
+
+  if (WiFi.status() == WL_CONNECTED) {
+    digitalWrite(STATUS_LED, HIGH);
+    Serial.print("Connected. ESP32 IP address: ");
+    Serial.println(WiFi.localIP());
+
+    if (MDNS.begin(MDNS_NAME)) {
+      Serial.print("mDNS started: http://");
+      Serial.print(MDNS_NAME);
+      Serial.println(".local");
+    }
+  } else {
+    Serial.println("WiFi failed. Starting fallback access point.");
+    WiFi.mode(WIFI_AP);
+    WiFi.softAP(FALLBACK_AP_SSID, FALLBACK_AP_PASSWORD);
+
+    digitalWrite(STATUS_LED, HIGH);
+    Serial.print("Fallback AP IP address: ");
+    Serial.println(WiFi.softAPIP());
+  }
+}
+
+void setupServer() {
+  server.on("/", HTTP_GET, handleRoot);
+  server.on("/status", HTTP_GET, handleStatus);
+  server.on("/command", HTTP_POST, handleCommand);
+  server.on("/robot_api", HTTP_POST, handleCommand);
+  server.on("/robot_api/", HTTP_POST, handleCommand);
+
+  server.on("/command", HTTP_OPTIONS, handleOptions);
+  server.on("/robot_api", HTTP_OPTIONS, handleOptions);
+  server.on("/robot_api/", HTTP_OPTIONS, handleOptions);
+
+  server.onNotFound(handleNotFound);
+  server.begin();
+  Serial.println("HTTP command server started.");
+}
+
+// -------------------- Main Robot Logic --------------------
+void runCommandTimeoutSafety() {
+  if (COMMAND_TIMEOUT_MS == 0) {
+    return;
+  }
+
+  if (activeCommand != "stop" && millis() - lastCommandMs > COMMAND_TIMEOUT_MS) {
+    activeCommand = "stop";
+    avoidState = AVOID_IDLE;
+    stopMotors();
+    Serial.println("Command timeout. Motors stopped.");
+  }
+}
+
+void runActiveCommand() {
+  if (avoidState != AVOID_IDLE) {
+    runAvoidance();
+    return;
+  }
+
+  if (activeCommand == "stop") {
+    stopMotors();
+    return;
+  }
+
+  if (activeCommand == "forward") {
+    if (obstacleActive) {
+      Serial.print("Obstacle detected at ");
+      Serial.print(lastDistanceCm);
+      Serial.println(" cm. Avoiding.");
+      startAvoidance();
+    } else {
+      moveForward();
+    }
+    return;
+  }
+
+  if (activeCommand == "backward") {
+    moveBackward();
+  } else if (activeCommand == "left") {
+    turnLeft();
+  } else if (activeCommand == "right") {
+    turnRight();
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  delay(500);
+
+  pinMode(STATUS_LED, OUTPUT);
+  digitalWrite(STATUS_LED, LOW);
+
+  pinMode(LEFT_IN1, OUTPUT);
+  pinMode(LEFT_IN2, OUTPUT);
+  pinMode(RIGHT_IN1, OUTPUT);
+  pinMode(RIGHT_IN2, OUTPUT);
+
+  pinMode(ULTRASONIC_TRIG, OUTPUT);
+  pinMode(ULTRASONIC_ECHO, INPUT);
+
+  setupPwmPin(LEFT_PWM, LEFT_PWM_CHANNEL);
+  setupPwmPin(RIGHT_PWM, RIGHT_PWM_CHANNEL);
+
+  stopMotors();
+  connectToWiFi();
+  setupServer();
+
+  Serial.println("Robot setup complete.");
+}
+
+void loop() {
+  server.handleClient();
+  updateObstacleSensor();
+  runCommandTimeoutSafety();
+  runActiveCommand();
+}

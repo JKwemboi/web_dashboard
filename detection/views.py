@@ -10,6 +10,11 @@ from .models import SystemSettings
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 import json
+from urllib import error, request as urlrequest
+from django.conf import settings
+
+
+ROBOT_MOVEMENT_COMMANDS = {"forward", "backward", "left", "right", "stop"}
 
 
 def dashboard(request):
@@ -81,7 +86,7 @@ def logout(request):
 
 @login_required(login_url='login')
 def video_feed(request):
-    cap = cv2.VideoCapture(0)  # or drone stream URL
+    cap = cv2.VideoCapture(0)  # or robot camera stream URL
 
     def generate():
         while True:
@@ -122,18 +127,57 @@ def map_view(request):
 
 @login_required(login_url='login')
 @require_POST
-def drone_control(request):
-    data = json.loads(request.body or "{}")
+def robot_control(request):
+    try:
+        data = json.loads(request.body or "{}")
+    except json.JSONDecodeError:
+        return JsonResponse({"status": "error", "message": "Invalid JSON"}, status=400)
+
     command = data.get("command")
+    if command not in ROBOT_MOVEMENT_COMMANDS:
+        return JsonResponse(
+            {
+                "status": "error",
+                "message": "Unsupported robot command",
+                "allowed_commands": sorted(ROBOT_MOVEMENT_COMMANDS),
+            },
+            status=400,
+        )
 
     print("Robot Command:", command)
+
+    esp32_url = getattr(settings, "ESP32_COMMAND_URL", "")
+    if esp32_url:
+        payload = json.dumps({"command": command}).encode("utf-8")
+        esp32_request = urlrequest.Request(
+            esp32_url,
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urlrequest.urlopen(esp32_request, timeout=2) as response:
+                return JsonResponse({
+                    "status": "ok",
+                    "command": command,
+                    "esp32_status": response.status,
+                })
+        except (error.URLError, TimeoutError) as exc:
+            return JsonResponse(
+                {
+                    "status": "error",
+                    "command": command,
+                    "message": f"ESP32 command failed: {exc}",
+                },
+                status=502,
+            )
 
     return JsonResponse({"status": "ok", "command": command})
 
 
 @login_required(login_url='login')
-def drone_control_page(request):
-    return render(request, 'drone_control.html', {'user': request.user})
+def robot_control_page(request):
+    return render(request, 'robot_control.html', {'user': request.user})
 
 
 def system_status(request):
@@ -192,8 +236,8 @@ def admin_only(user):
 
 
 @login_required(login_url='login')
-def drone_location(request):
-    # to be replaced with real drone GPS later
+def robot_location(request):
+    # to be replaced with real robot GPS later
     data = {
         "lat": -1.2921,
         "lng": 36.8219
@@ -283,7 +327,7 @@ def settings_view(request):
         )
 
     if request.method == "POST":
-        settings.drone_name = request.POST.get('drone_name')
+        settings.drone_name = request.POST.get('robot_name') or request.POST.get('drone_name')
         settings.max_speed = request.POST.get('max_speed')
         settings.auto_patrol = request.POST.get('auto_patrol') == "on"
 
@@ -299,4 +343,7 @@ def settings_view(request):
         settings.save()
         return redirect('settings')
 
-    return render(request, 'setting.html', {'settings': settings})
+    return render(request, 'setting.html', {
+        'settings': settings,
+        'robot_name': settings.drone_name,
+    })

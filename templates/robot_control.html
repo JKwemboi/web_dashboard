@@ -8,7 +8,7 @@
     <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
         <div>
             <h1 class="page-title">Robot Control</h1>
-            <p class="page-subtitle">Operator command surface for movement, speed, camera position, and mission actions.</p>
+            <p class="page-subtitle">Operator command surface for ESP32 movement commands and live monitoring.</p>
         </div>
         <a href="{% url 'dashboard' %}" class="btn-robot-secondary">
             <i class="fa-solid fa-arrow-left"></i>
@@ -41,11 +41,11 @@
     <div class="col-xl-4">
         <section class="robot-card h-100">
             <div class="panel-header">
-                <h2 class="panel-title">Drive Controls</h2>
+                <h2 class="panel-title">ESP32 Drive Controls</h2>
                 <span class="status-pill status-info" id="commandStatus">Ready</span>
             </div>
             <div class="p-3">
-                <div class="control-pad mb-4">
+                <div class="control-pad">
                     <span></span>
                     <button class="control-btn" type="button" onclick="sendCommand('forward')" title="Forward">
                         <i class="fa-solid fa-arrow-up"></i>
@@ -61,28 +61,11 @@
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
                     <span></span>
-                    <button class="control-btn" type="button" onclick="sendCommand('reverse')" title="Reverse">
+                    <button class="control-btn" type="button" onclick="sendCommand('backward')" title="Backward">
                         <i class="fa-solid fa-arrow-down"></i>
                     </button>
                     <span></span>
                 </div>
-
-                <div class="action-row mb-4">
-                    <button class="btn-robot" type="button" onclick="sendCommand('start_patrol')">
-                        <i class="fa-solid fa-route"></i>
-                        Start Patrol
-                    </button>
-                    <button class="btn-robot-secondary" type="button" onclick="sendCommand('return_home')">
-                        <i class="fa-solid fa-house"></i>
-                        Return Home
-                    </button>
-                </div>
-
-                <label class="form-label" for="speedRange">Speed Limit</label>
-                <input type="range" class="form-range" id="speedRange" min="10" max="100" value="50" oninput="updateSpeed(this.value)">
-
-                <label class="form-label mt-3" for="cameraTilt">Camera Tilt</label>
-                <input type="range" class="form-range" id="cameraTilt" min="-45" max="45" value="0" oninput="sendCommand('camera_tilt_' + this.value)">
             </div>
         </section>
     </div>
@@ -95,7 +78,7 @@
         <div class="stat-note">Estimated 42 min remaining</div>
     </div>
     <div class="robot-card stat-tile">
-        <div class="stat-label">Network</div>
+        <div class="stat-label">ESP32 Link</div>
         <div class="stat-value">94%</div>
         <div class="stat-note">Command channel stable</div>
     </div>
@@ -114,7 +97,7 @@
 
 {% block scripts %}
 <script>
-    const commandUrl = "{% url 'drone_control' %}";
+    const commandUrl = "{% url 'robot_control' %}";
 
     function getCSRFToken() {
         const token = document.cookie.split('; ')
@@ -138,13 +121,12 @@
             },
             body: JSON.stringify({ command })
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) throw new Error('Command failed');
+                return response.json();
+            })
             .then(() => setCommandStatus('Command Sent', 'status-safe'))
             .catch(() => setCommandStatus('Command Failed', 'status-danger'));
-    }
-
-    function updateSpeed(value) {
-        sendCommand(`speed_${value}`);
     }
 </script>
 {% endblock %}

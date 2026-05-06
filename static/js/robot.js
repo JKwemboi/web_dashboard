@@ -1,5 +1,5 @@
 function sendCommand(command) {
-    fetch("/drone_control/", {
+    fetch("/robot_api/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -7,16 +7,15 @@ function sendCommand(command) {
         },
         body: JSON.stringify({ command: command })
     })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) throw new Error("Command failed");
+            return res.json();
+        })
         .then(data => console.log(data));
 }
 
-function updateSpeed(value) {
-    sendCommand("speed_" + value);
-}
-
 function getCSRFToken() {
-    return document.cookie.split('; ')
-        .find(row => row.startsWith('csrftoken'))
-        .split('=')[1];
+    const token = document.cookie.split('; ')
+        .find(row => row.startsWith('csrftoken='));
+    return token ? token.split('=')[1] : '';
 }
