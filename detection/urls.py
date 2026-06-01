@@ -7,7 +7,7 @@ urlpatterns = [
     path('signup', views.signup, name='signup'),
     path('profile/', views.profile, name='profile'),
     path('logout', views.logout, name='logout'),
-    path('video_feed', views.video_feed, name='video_feed'),
+#     path('video_feed', views.video_feed, name='video_feed'),
     path('map/', views.map_view, name='map'),
     path('robot_control_page/', views.robot_control_page,
          name='robot_control_page'),

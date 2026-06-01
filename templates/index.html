@@ -9,7 +9,8 @@
     <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
         <div>
             <h1 class="page-title">Welcome back, {{ user.first_name|default:user.username }}</h1>
-            <p class="page-subtitle">Live surveillance feed, detection activity, robot telemetry, and alert readiness.</p>
+            <p class="page-subtitle">Live surveillance feed, detection activity, robot telemetry, and alert readiness.
+            </p>
         </div>
         <div class="action-row">
             <a href="{% url 'robot_control_page' %}" class="btn-robot">
@@ -58,11 +59,24 @@
                 <span class="status-pill status-live"><span class="live-dot"></span> Live</span>
             </div>
             <div class="video-shell">
-                <img src="{% url 'video_feed' %}" alt="Live video feed from surveillance robot">
+                <img src="http://192.168.137.229:5000/video_feed" alt="Live video feed from Raspberry Pi">
+
                 <div class="video-overlay">
-                    <span class="metric-pill"><i class="fa-solid fa-camera"></i> Front camera</span>
-                    <span class="metric-pill"><i class="fa-solid fa-brain"></i> AI model armed</span>
-                    <span class="metric-pill"><i class="fa-solid fa-location-crosshairs"></i> GPS locked</span>
+                    <span class="metric-pill">
+                        <i class="fa-solid fa-camera"></i> Raspberry Pi Camera
+                    </span>
+
+                    <span class="metric-pill">
+                        <i class="fa-solid fa-brain"></i> YOLO Detection Active
+                    </span>
+
+                    <span class="metric-pill">
+                        <i class="fa-solid fa-location-crosshairs"></i> GPS Tracking
+                    </span>
+
+                    <span class="metric-pill bg-danger">
+                        <i class="fa-solid fa-satellite-dish"></i> LIVE STREAM
+                    </span>
                 </div>
             </div>
         </section>
@@ -206,7 +220,8 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="7" class="empty-state">Detection logs will appear here after the robot saves events.</td>
+                    <td colspan="7" class="empty-state">Detection logs will appear here after the robot saves events.
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

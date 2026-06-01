@@ -85,23 +85,23 @@ def logout(request):
 
 
 @login_required(login_url='login')
-def video_feed(request):
-     cap = cv2.VideoCapture(0)  # or robot camera stream URL
+# def video_feed(request):
+#      cap = cv2.VideoCapture(0)  # or robot camera stream URL
 
-     def generate():
-         while True:
-             success, frame = cap.read()
-             if not success:
-                 break
+#      def generate():
+#          while True:
+#              success, frame = cap.read()
+#              if not success:
+#                  break
 
-             _, buffer = cv2.imencode('.jpg', frame)
-             frame = buffer.tobytes()
+#              _, buffer = cv2.imencode('.jpg', frame)
+#              frame = buffer.tobytes()
 
-             yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+#              yield (b'--frame\r\n'
+#                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-     return StreamingHttpResponse(generate(),
-                                  content_type='multipart/x-mixed-replace; boundary=frame')
+#      return StreamingHttpResponse(generate(),
+#                                   content_type='multipart/x-mixed-replace; boundary=frame')
 
 
 @login_required(login_url='login')
