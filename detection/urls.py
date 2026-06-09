@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
+    path('dashboard-data/', views.dashboard_data, name='dashboard_data'),
     path('login', views.login, name='login'),
     path('signup', views.signup, name='signup'),
     path('profile/', views.profile, name='profile'),
@@ -24,4 +25,7 @@ urlpatterns = [
     path('detection-locations/', views.detection_locations,
          name='detection_locations'),
     path('settings/', views.settings_view, name='settings'),
+    # API endpoints targeting background integrations
+    path('api/telemetry/', views.receive_telemetry, name='receive_telemetry'),
+    path('api/dashboard-data/', views.dashboard_data_view, name='dashboard_data'),
 ]

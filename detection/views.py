@@ -3,18 +3,98 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.http import StreamingHttpResponse, JsonResponse
-from detection.models import Detection
+from detection.models import Detection, RobotTelemetry
 from django.db.models import Count
 from datetime import datetime, timedelta
 from .models import SystemSettings
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.utils import timezone
 import json
 from urllib import error, request as urlrequest
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+
 
 
 ROBOT_MOVEMENT_COMMANDS = {"forward", "backward", "left", "right", "stop"}
+
+
+@csrf_exempt
+def receive_telemetry(request):
+    """
+    API endpoint listening for inbound packets posted by the Pi.
+    """
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            
+            # 1. Capture system state settings configuration
+            telemetry, created = RobotTelemetry.objects.get_or_create(id=1)
+            telemetry.robot_online = data.get('robot_online', True)
+            telemetry.current_zone = data.get('current_zone', 'Unknown')
+            telemetry.save()
+            
+            # 2. Append threat incident directly to logs database
+            is_lion = data.get('is_lion', False)
+            if is_lion: 
+                Detection.objects.create(
+                    is_lion=is_lion,
+                    confidence=data.get('confidence'),
+                    location=data.get('current_zone')
+                )
+                
+            return JsonResponse({"status": "success"}, status=201)
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)}, status=400)
+            
+    return JsonResponse({"status": "method not allowed"}, status=405)
+
+
+def _dashboard_refresh_interval_ms():
+    system_settings = SystemSettings.objects.first()
+    refresh_seconds = getattr(system_settings, "refresh_rate", None) or 2
+
+    try:
+        refresh_seconds = int(refresh_seconds)
+    except (TypeError, ValueError):
+        refresh_seconds = 2
+
+    return max(1, min(refresh_seconds, 30)) * 1000
+
+
+def _format_confidence(confidence):
+    if confidence is None:
+        return "--"
+
+    try:
+        value = float(confidence)
+    except (TypeError, ValueError):
+        return "--"
+
+    if 0 <= value <= 1:
+        value *= 100
+
+    return f"{value:.1f}".rstrip("0").rstrip(".")
+
+
+def _serialize_detection(detection):
+    timestamp = timezone.localtime(detection.timestamp)
+
+    return {
+        "id": detection.id,
+        "is_lion": detection.is_lion,
+        "label": detection.label or ("Lion" if detection.is_lion else "Detection"),
+        "title": "Threat Detected" if detection.is_lion else "Safe Event",
+        "kind": "Threat" if detection.is_lion else "Safe",
+        "status": "Alert Sent" if detection.is_lion else "Normal",
+        "status_class": "status-danger" if detection.is_lion else "status-safe",
+        "location": detection.location or "Unknown",
+        "confidence": _format_confidence(detection.confidence),
+        "timestamp": timestamp.isoformat(),
+        "time_short": timestamp.strftime("%b %d, %H:%M"),
+        "image_url": detection.image.url if detection.image else "",
+    }
 
 
 def dashboard(request):
@@ -30,6 +110,22 @@ def dashboard(request):
         'total_detections': detection_qs.count(),
         'lion_detections': detection_qs.filter(is_lion=True).count(),
         'normal_detections': detection_qs.filter(is_lion=False).count(),
+        'dashboard_refresh_ms': _dashboard_refresh_interval_ms(),
+    })
+
+
+@login_required(login_url='login')
+def dashboard_data(request):
+    detection_qs = Detection.objects.all().order_by('-timestamp')
+    detections = [_serialize_detection(detection) for detection in detection_qs[:6]]
+
+    return JsonResponse({
+        "detections": detections,
+        "total_detections": detection_qs.count(),
+        "lion_detections": detection_qs.filter(is_lion=True).count(),
+        "normal_detections": detection_qs.filter(is_lion=False).count(),
+        "latest_detection_id": detections[0]["id"] if detections else None,
+        "refresh_interval_ms": _dashboard_refresh_interval_ms(),
     })
 
 
@@ -85,24 +181,47 @@ def logout(request):
 
 
 @login_required(login_url='login')
-# def video_feed(request):
-#      cap = cv2.VideoCapture(0)  # or robot camera stream URL
+def dashboard_data_view(request):
+    """
+    API endpoint polled by the dashboard webpage every 2 seconds.
+    """
+    # 1. Pull current online and location tracking telemetry
+    try:
+        telemetry = RobotTelemetry.objects.get(id=1)
+        robot_online = telemetry.robot_online
+        current_zone = telemetry.current_zone
+    except RobotTelemetry.DoesNotExist:
+        robot_online = False
+        current_zone = "Offline"
 
-#      def generate():
-#          while True:
-#              success, frame = cap.read()
-#              if not success:
-#                  break
+    # 2. Aggregate core metrics
+    total_detections = Detection.objects.count()
+    lion_detections = Detection.objects.filter(is_lion=True).count()
+    
+    # 3. Pull last 10 entries to compile visual logs arrays
+    recent_events = Detection.objects.order_by('-timestamp')[:10]
+    detections_list = []
+    
+    for d in recent_events:
+        detections_list.append({
+            "title": "Threat Detected" if d.is_lion else "Safe Event",
+            "kind": "Threat" if d.is_lion else "Safe",
+            "is_lion": d.is_lion,
+            "status": "Alert Sent" if d.is_lion else "Normal",
+            "status_class": "status-danger" if d.is_lion else "status-safe",
+            "location": d.location or "Unknown zone",
+            "time_short": d.timestamp.strftime("%b %d, %H:%M"),
+            "confidence": int(d.confidence) if d.confidence else "--",
+            "image_url": d.image.url if d.image else None
+        })
 
-#              _, buffer = cv2.imencode('.jpg', frame)
-#              frame = buffer.tobytes()
-
-#              yield (b'--frame\r\n'
-#                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
-#      return StreamingHttpResponse(generate(),
-#                                   content_type='multipart/x-mixed-replace; boundary=frame')
-
+    return JsonResponse({
+        "total_detections": total_detections,
+        "lion_detections": lion_detections,
+        "robot_online": robot_online,
+        "current_zone": current_zone,
+        "detections": detections_list
+    })
 
 @login_required(login_url='login')
 def profile(request):

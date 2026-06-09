@@ -1,13 +1,13 @@
 from django.db import models
 
 
-class Detection (models.Model):
-    is_lion = models.BooleanField(default=False)
-    location = models.CharField(default="Unknown", max_length=100)
-    confidence = models.FloatField(null=True, blank=True)
-    label = models.CharField(max_length=255)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='detections/images', null=True)
+# class Detection (models.Model):
+#     is_lion = models.BooleanField(default=False)
+#     location = models.CharField(default="Unknown", max_length=100)
+#     confidence = models.FloatField(null=True, blank=True)
+#     label = models.CharField(max_length=255)
+#     timestamp = models.DateTimeField(auto_now_add=True)
+#     image = models.ImageField(upload_to='detections/images', null=True)
 
 
 class Alerts(models.Model):
@@ -29,3 +29,17 @@ class SystemSettings(models.Model):
     email = models.EmailField()
 
     refresh_rate = models.IntegerField(default=2)
+
+class RobotTelemetry(models.Model):
+    """Tracks global runtime metrics received from the robot platform."""
+    robot_online = models.BooleanField(default=False)
+    current_zone = models.CharField(max_length=50, default="Unknown")
+    last_updated = models.DateTimeField(auto_now=True)
+
+class Detection(models.Model):
+    """Logs the analytical records for auditing, alerts, and tables."""
+    is_lion = models.BooleanField(default=False)
+    confidence = models.IntegerField(null=True, blank=True)
+    location = models.CharField(max_length=100, default="Unknown")
+    timestamp = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to="detections/images", null=True, blank=True)

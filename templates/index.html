@@ -28,22 +28,22 @@
 <section class="stat-grid mb-4">
     <div class="robot-card stat-tile">
         <div class="stat-label">Robot Status</div>
-        <div class="stat-value">Online</div>
+        <div class="stat-value" id="robotStatusValue">Offline</div> 
         <div class="stat-note"><i class="fa-solid fa-signal me-1 text-success"></i> 42 ms command latency</div>
     </div>
     <div class="robot-card stat-tile">
         <div class="stat-label">Total Detections</div>
-        <div class="stat-value">{{ total_detections|default:"0" }}</div>
+        <div class="stat-value" id="totalDetectionsValue">{{ total_detections|default:"0" }}</div>
         <div class="stat-note">All saved detection events</div>
     </div>
     <div class="robot-card stat-tile">
         <div class="stat-label">Threat Detections</div>
-        <div class="stat-value text-danger">{{ lion_detections|default:"0" }}</div>
+        <div class="stat-value text-danger" id="threatDetectionsValue">{{ lion_detections|default:"0" }}</div>
         <div class="stat-note">AI labels requiring operator review</div>
     </div>
     <div class="robot-card stat-tile">
         <div class="stat-label">Current Zone</div>
-        <div class="stat-value">A-12</div>
+        <div class="stat-value" id="currentZoneValue">A-12</div>
         <div class="stat-note">Nairobi patrol perimeter</div>
     </div>
 </section>
@@ -126,49 +126,51 @@
         </a>
     </div>
 
-    {% if detections %}
-    <div class="event-grid">
-        {% for d in detections %}
-        <article class="robot-card event-card">
-            {% if d.image %}
-            <img src="{{ d.image.url }}" class="capture-thumb" alt="Detection capture">
-            {% else %}
-            <div class="capture-placeholder"><i class="fa-solid fa-camera-retro"></i></div>
-            {% endif %}
-            <div class="event-body">
-                <div class="event-title">
-                    <h3>{% if d.is_lion %}Threat Detected{% else %}Safe Event{% endif %}</h3>
-                    <span class="status-pill {% if d.is_lion %}status-danger{% else %}status-safe{% endif %}">
-                        {% if d.is_lion %}Alert{% else %}Normal{% endif %}
-                    </span>
+    <div id="recentDetectionsPanel">
+        {% if detections %}
+        <div class="event-grid">
+            {% for d in detections %}
+            <article class="robot-card event-card">
+                {% if d.image %}
+                <img src="{{ d.image.url }}" class="capture-thumb" alt="Detection capture">
+                {% else %}
+                <div class="capture-placeholder"><i class="fa-solid fa-camera-retro"></i></div>
+                {% endif %}
+                <div class="event-body">
+                    <div class="event-title">
+                        <h3>{% if d.is_lion %}Threat Detected{% else %}Safe Event{% endif %}</h3>
+                        <span class="status-pill {% if d.is_lion %}status-danger{% else %}status-safe{% endif %}">
+                            {% if d.is_lion %}Alert{% else %}Normal{% endif %}
+                        </span>
+                    </div>
+                    <div class="meta-list">
+                        <span><i class="fa-solid fa-location-dot me-2"></i>{{ d.location|default:"Unknown zone" }}</span>
+                        <span><i class="fa-solid fa-clock me-2"></i>{{ d.timestamp|date:"M d, H:i" }}</span>
+                        <span><i class="fa-solid fa-crosshairs me-2"></i>{{ d.confidence|default:"--" }}% confidence</span>
+                    </div>
                 </div>
-                <div class="meta-list">
-                    <span><i class="fa-solid fa-location-dot me-2"></i>{{ d.location|default:"Unknown zone" }}</span>
-                    <span><i class="fa-solid fa-clock me-2"></i>{{ d.timestamp|date:"M d, H:i" }}</span>
-                    <span><i class="fa-solid fa-crosshairs me-2"></i>{{ d.confidence|default:"--" }}% confidence</span>
-                </div>
-            </div>
-        </article>
-        {% endfor %}
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="robot-card empty-state">
+            <i class="fa-solid fa-folder-open fa-2x mb-3"></i>
+            <p class="mb-0">No detections have been saved yet.</p>
+        </div>
+        {% endif %}
     </div>
-    {% else %}
-    <div class="robot-card empty-state">
-        <i class="fa-solid fa-folder-open fa-2x mb-3"></i>
-        <p class="mb-0">No detections have been saved yet.</p>
-    </div>
-    {% endif %}
 </section>
 
 <section class="robot-card mt-4">
     <div class="panel-header">
         <h2 class="panel-title">Detection and Alert Logs</h2>
         <div class="action-row">
-            <select class="form-select form-select-sm robot-input" aria-label="Filter detection type">
+            <select class="form-select form-select-sm robot-input" id="detectionTypeFilter" aria-label="Filter detection type">
                 <option>All Types</option>
                 <option>Threat</option>
                 <option>Safe</option>
             </select>
-            <select class="form-select form-select-sm robot-input" aria-label="Filter alert status">
+            <select class="form-select form-select-sm robot-input" id="detectionStatusFilter" aria-label="Filter alert status">
                 <option>All Statuses</option>
                 <option>Alert Sent</option>
                 <option>Resolved</option>
@@ -188,7 +190,7 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="detectionLogBody">
                 {% for d in detections %}
                 <tr>
                     <td>
@@ -228,4 +230,173 @@
         </table>
     </div>
 </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const dashboardDataUrl = "{% url 'dashboard_data' %}";
+    const dashboardRefreshMs = Number("{{ dashboard_refresh_ms|default:2000 }}") || 2000;
+    const recentDetectionsPanel = document.getElementById('recentDetectionsPanel');
+    const detectionLogBody = document.getElementById('detectionLogBody');
+    const detectionTypeFilter = document.getElementById('detectionTypeFilter');
+    const detectionStatusFilter = document.getElementById('detectionStatusFilter');
+    let latestDetections = [];
+
+    function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, character => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            '\'': '&#039;'
+        }[character]));
+    }
+
+    function detectionImage(detection, className) {
+        if (detection.image_url) {
+            return `<img src="${escapeHtml(detection.image_url)}" class="${className}" alt="Detection capture">`;
+        }
+        if (className === 'table-capture') {
+            return '<div class="table-capture d-grid place-items-center"></div>';
+        }
+        return '<div class="capture-placeholder"><i class="fa-solid fa-camera-retro"></i></div>';
+    }
+
+    function emptyState(message, colspan) {
+        if (colspan) {
+            return `<tr><td colspan="${colspan}" class="empty-state">${escapeHtml(message)}</td></tr>`;
+        }
+        return `
+            <div class="robot-card empty-state">
+                <i class="fa-solid fa-folder-open fa-2x mb-3"></i>
+                <p class="mb-0">${escapeHtml(message)}</p>
+            </div>
+        `;
+    }
+
+    function renderRecentDetections(detections) {
+        if (!detections.length) {
+            recentDetectionsPanel.innerHTML = emptyState('No detections have been saved yet.');
+            return;
+        }
+
+        const cards = detections.map(detection => `
+            <article class="robot-card event-card">
+                ${detectionImage(detection, 'capture-thumb')}
+                <div class="event-body">
+                    <div class="event-title">
+                        <h3>${escapeHtml(detection.title)}</h3>
+                        <span class="status-pill ${escapeHtml(detection.status_class)}">
+                            ${detection.is_lion ? 'Alert' : 'Normal'}
+                        </span>
+                    </div>
+                    <div class="meta-list">
+                        <span><i class="fa-solid fa-location-dot me-2"></i>${escapeHtml(detection.location || 'Unknown zone')}</span>
+                        <span><i class="fa-solid fa-clock me-2"></i>${escapeHtml(detection.time_short)}</span>
+                        <span><i class="fa-solid fa-crosshairs me-2"></i>${escapeHtml(detection.confidence)}% confidence</span>
+                    </div>
+                </div>
+            </article>
+        `).join('');
+
+        recentDetectionsPanel.innerHTML = `<div class="event-grid">${cards}</div>`;
+    }
+
+    function filteredDetections() {
+        const selectedType = detectionTypeFilter.value;
+        const selectedStatus = detectionStatusFilter.value;
+
+        return latestDetections.filter(detection => {
+            const typeMatches = selectedType === 'All Types' || detection.kind === selectedType;
+            const statusMatches = selectedStatus === 'All Statuses' || detection.status === selectedStatus;
+            return typeMatches && statusMatches;
+        });
+    }
+
+    function renderDetectionLog() {
+        const rows = filteredDetections();
+
+        if (!rows.length) {
+            detectionLogBody.innerHTML = emptyState('No detection logs match the current filters.', 7);
+            return;
+        }
+
+        detectionLogBody.innerHTML = rows.map(detection => `
+            <tr>
+                <td>${detectionImage(detection, 'table-capture')}</td>
+                <td>${escapeHtml(detection.kind)}</td>
+                <td>${escapeHtml(detection.location || 'Unknown')}</td>
+                <td>${escapeHtml(detection.time_short)}</td>
+                <td>${escapeHtml(detection.confidence)}%</td>
+                <td>
+                    <span class="status-pill ${escapeHtml(detection.status_class)}">
+                        ${escapeHtml(detection.status)}
+                    </span>
+                </td>
+                <td>
+                    <div class="action-row">
+                        <button class="header-nav-item" type="button" title="View event">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                        <button class="header-nav-item" type="button" title="Mark resolved">
+                            <i class="fa-solid fa-check"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function updateDashboard(data) {
+        // Live counters integration
+        document.getElementById('totalDetectionsValue').textContent = data.total_detections ?? 0;
+        document.getElementById('threatDetectionsValue').textContent = data.lion_detections ?? 0;
+        
+        // Live status engine modifications
+        const robotStatusEl = document.getElementById('robotStatusValue');
+        if (robotStatusEl) {
+            robotStatusEl.textContent = data.robot_online ? 'Online' : 'Offline';
+            if (data.robot_online) {
+                robotStatusEl.classList.remove('text-muted');
+            } else {
+                robotStatusEl.classList.add('text-muted');
+            }
+        }
+
+        // Live spatial telemetry coordinates
+        const currentZoneEl = document.getElementById('currentZoneValue');
+        if (currentZoneEl) {
+            currentZoneEl.textContent = data.current_zone || 'Unknown';
+        }
+
+        latestDetections = Array.isArray(data.detections) ? data.detections : [];
+        renderRecentDetections(latestDetections);
+        renderDetectionLog();
+    }
+
+    function refreshDashboardDetections() {
+        fetch(dashboardDataUrl, {
+            headers: { 'Accept': 'application/json' },
+            credentials: 'same-origin'
+        })
+            .then(response => {
+                if (!response.ok) throw new Error('Dashboard data request failed');
+                return response.json();
+            })
+            .then(updateDashboard)
+            .catch(() => {
+                // Connection loss fallback safety handling
+                const robotStatusEl = document.getElementById('robotStatusValue');
+                if (robotStatusEl) {
+                    robotStatusEl.textContent = 'Offline';
+                    robotStatusEl.classList.add('text-muted');
+                }
+            });
+    }
+
+    detectionTypeFilter.addEventListener('change', renderDetectionLog);
+    detectionStatusFilter.addEventListener('change', renderDetectionLog);
+    refreshDashboardDetections();
+    setInterval(refreshDashboardDetections, dashboardRefreshMs);
+</script>
 {% endblock %}

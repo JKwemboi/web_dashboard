@@ -40,28 +40,40 @@
 
     <div class="col-xl-4">
         <section class="robot-card h-100">
-            <div class="panel-header">
-                <h2 class="panel-title">ESP32 Drive Controls</h2>
+            <div class="panel-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <h2 class="panel-title">ESP32 Drive Controls</h2>
+                    <div class="mt-1 d-flex align-items-center gap-1">
+                        <label for="espIpAddress"
+                            style="font-size: 11px; color: var(--muted-color, #888); font-weight: 500;">TARGET
+                            IP:</label>
+                        <input type="text" id="espIpAddress" value="192.168.137.100" placeholder="e.g. 192.168.1.50"
+                            style="background: #1a1a1a; border: 1px solid #333; color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 4px; width: 110px; font-family: monospace;">
+                    </div>
+                </div>
                 <span class="status-pill status-info" id="commandStatus">Ready</span>
             </div>
             <div class="p-3">
                 <div class="control-pad">
                     <span></span>
-                    <button class="control-btn" type="button" onclick="sendCommand('forward')" title="Forward">
+                    <button class="control-btn" type="button" title="Forward" onclick="fireHardwareSignal('f', 1)">
                         <i class="fa-solid fa-arrow-up"></i>
                     </button>
                     <span></span>
-                    <button class="control-btn" type="button" onclick="sendCommand('left')" title="Left">
+
+                    <button class="control-btn" type="button" title="Left" onclick="fireHardwareSignal('l', 1)">
                         <i class="fa-solid fa-arrow-left"></i>
                     </button>
-                    <button class="control-btn stop-btn" type="button" onclick="sendCommand('stop')" title="Stop">
+                    <button class="control-btn stop-btn" type="button" title="Stop"
+                        onclick="fireHardwareSignal('s', 1)">
                         <i class="fa-solid fa-stop"></i>
                     </button>
-                    <button class="control-btn" type="button" onclick="sendCommand('right')" title="Right">
+                    <button class="control-btn" type="button" title="Right" onclick="fireHardwareSignal('r', 1)">
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
+
                     <span></span>
-                    <button class="control-btn" type="button" onclick="sendCommand('backward')" title="Backward">
+                    <button class="control-btn" type="button" title="Backward" onclick="fireHardwareSignal('b', 1)">
                         <i class="fa-solid fa-arrow-down"></i>
                     </button>
                     <span></span>
@@ -79,13 +91,13 @@
     </div>
     <div class="robot-card stat-tile">
         <div class="stat-label">ESP32 Link</div>
-        <div class="stat-value">94%</div>
-        <div class="stat-note">Command channel stable</div>
+        <div class="stat-value" id="hardwareLinkStatus">94%</div>
+        <div class="stat-note" id="hardwareLinkNote">Command channel stable</div>
     </div>
     <div class="robot-card stat-tile">
         <div class="stat-label">Obstacle Sensor</div>
-        <div class="stat-value">Clear</div>
-        <div class="stat-note">2.4 m forward clearance</div>
+        <div class="stat-value" id="telemetryDistanceValue">-- cm</div>
+        <div class="stat-note" id="telemetryDistanceNote">Monitoring ultrasonic array</div>
     </div>
     <div class="robot-card stat-tile">
         <div class="stat-label">AI Detection</div>
@@ -97,36 +109,113 @@
 
 {% block scripts %}
 <script>
-    const commandUrl = "{% url 'robot_control' %}";
-
-    function getCSRFToken() {
-        const token = document.cookie.split('; ')
-            .find(row => row.startsWith('csrftoken='));
-        return token ? token.split('=')[1] : '';
-    }
-
     function setCommandStatus(text, kind) {
         const status = document.getElementById('commandStatus');
-        status.textContent = text;
-        status.className = `status-pill ${kind}`;
+        if (status) {
+            status.textContent = text;
+            status.className = `status-pill ${kind}`;
+        }
     }
 
-    function sendCommand(command) {
-        setCommandStatus('Sending', 'status-warning');
-        fetch(commandUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCSRFToken()
-            },
-            body: JSON.stringify({ command })
-        })
+    /**
+     * Sends locking movement signals directly to the ESP32 using correct ID references.
+     */
+    function fireHardwareSignal(direction, state) {
+        // FIXED: Restored correct DOM identity anchor to parse the input box value
+        const ipField = document.getElementById('espIpAddress');
+        if (!ipField) return;
+
+        const targetIp = ipField.value.trim();
+        if (!targetIp) {
+            setCommandStatus('Set IP First', 'status-danger');
+            return;
+        }
+
+        // Handle visual feedback panel text states
+        if (direction === 's') {
+            setCommandStatus('Stopped', 'status-info');
+        } else {
+            const dirLabels = { 'f': 'Forward', 'b': 'Backward', 'l': 'Turning Left', 'r': 'Turning Right' };
+            setCommandStatus(dirLabels[direction] || 'Driving...', 'status-warning');
+        }
+
+        // FIXED: Wrapped target safely with implicit cross-origin protocol schema
+        const hardwareEndpoint = `http://${targetIp}/cmd?dir=${direction}&state=${state}`;
+
+        fetch(hardwareEndpoint, { mode: 'cors' })
             .then(response => {
-                if (!response.ok) throw new Error('Command failed');
-                return response.json();
+                if (!response.ok) throw new Error('Network dropped link');
+                document.getElementById('hardwareLinkStatus').innerText = "100%";
+                document.getElementById('hardwareLinkNote').innerText = "Direct link optimized";
             })
-            .then(() => setCommandStatus('Command Sent', 'status-safe'))
-            .catch(() => setCommandStatus('Command Failed', 'status-danger'));
+            .catch(error => {
+                console.error("Hardware pipeline routing error:", error);
+                setCommandStatus('Offline ⚠️', 'status-danger');
+                document.getElementById('hardwareLinkStatus').innerText = "0%";
+                document.getElementById('hardwareLinkNote').innerText = "Check network connection or IP";
+            });
     }
+
+    /**
+     * Periodically queries the ESP32 status JSON endpoint and formats telemetry metrics.
+     */
+    function syncLiveTelemetry() {
+        const ipField = document.getElementById('espIpAddress');
+        if (!ipField) return;
+
+        const targetIp = ipField.value.trim();
+        if (!targetIp) return;
+
+        // FIXED: Constructed absolute route with explicit resource endpoint destination mapping
+        const statusEndpoint = `http://${targetIp}/status`;
+
+        fetch(statusEndpoint, { mode: 'cors' })
+            .then(res => {
+                if (!res.ok) throw new Error('Telemetry route unresponsive');
+                return res.json();
+            })
+            .then(data => {
+                const distanceElement = document.getElementById('telemetryDistanceValue');
+                const noteElement = document.getElementById('telemetryDistanceNote');
+
+                if (distanceElement && noteElement) {
+                    const distance = parseFloat(data.distance_cm);
+                    if (distance < 0) {
+                        distanceElement.innerText = "Out of Range";
+                        noteElement.innerText = "No obstacles within bounds";
+                    } else {
+                        distanceElement.innerText = `${distance.toFixed(1)} cm`;
+                        
+                        // Dynamically look up safety configurations from response stream attributes
+                        if (distance <= parseFloat(data.obstacle_threshold_cm || 20)) {
+                            noteElement.innerText = "⚠️ CRITICAL CLOSURE!";
+                            noteElement.style.color = "#f44336";
+
+                            // AUTO SAFETY OVERRIDE: Update main drive status if robot software locked itself down
+                            if (data.obstacle_mode === false && data.auto_state_name === "IDLE") {
+                                setCommandStatus('Auto-Stopped 🛑', 'status-danger');
+                            }
+                        } else {
+                            noteElement.innerText = `${(distance / 100).toFixed(2)} m forward clearance`;
+                            noteElement.style.color = "";
+                        }
+                    }
+                }
+                
+                // Keep network connection markers green and healthy while streaming payload pulses
+                document.getElementById('hardwareLinkStatus').innerText = "100%";
+                document.getElementById('hardwareLinkNote').innerText = "Telemetry streaming active";
+            })
+            .catch(err => {
+                console.warn("Telemetry polling skip catch:", err);
+                // Don't forcefully crash UI state on occasional dropouts while robot motors draw peak current
+            });
+    }
+
+    // Initialize telemetry daemon heartbeat execution loop once per second
+    setInterval(syncLiveTelemetry, 1000);
+    
+    // Fire an initial state handshake setup immediately on document parse completion
+    document.addEventListener("DOMContentLoaded", syncLiveTelemetry);
 </script>
 {% endblock %}
