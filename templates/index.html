@@ -25,28 +25,7 @@
     </div>
 </div>
 
-<section class="stat-grid mb-4">
-    <div class="robot-card stat-tile">
-        <div class="stat-label">Robot Status</div>
-        <div class="stat-value" id="robotStatusValue">Offline</div> 
-        <div class="stat-note"><i class="fa-solid fa-signal me-1 text-success"></i> 42 ms command latency</div>
-    </div>
-    <div class="robot-card stat-tile">
-        <div class="stat-label">Total Detections</div>
-        <div class="stat-value" id="totalDetectionsValue">{{ total_detections|default:"0" }}</div>
-        <div class="stat-note">All saved detection events</div>
-    </div>
-    <div class="robot-card stat-tile">
-        <div class="stat-label">Threat Detections</div>
-        <div class="stat-value text-danger" id="threatDetectionsValue">{{ lion_detections|default:"0" }}</div>
-        <div class="stat-note">AI labels requiring operator review</div>
-    </div>
-    <div class="robot-card stat-tile">
-        <div class="stat-label">Current Zone</div>
-        <div class="stat-value" id="currentZoneValue">A-12</div>
-        <div class="stat-note">Nairobi patrol perimeter</div>
-    </div>
-</section>
+
 
 <div class="row g-4">
     <div class="col-xl-8">
