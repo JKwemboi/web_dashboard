@@ -40,7 +40,7 @@ An autonomous surveillance robot that uses **YOLOv8**, **OpenCV**, and a **Raspb
 
 ## 📫 Connect With Me
 
-- 💼 LinkedIn: *Your LinkedIn Profile*
+- 💼 LinkedIn: *linkedin.com/in/joshuakwemboi*
 - 🌐 Portfolio: *ilove_engineering.com*
 - 📧 Email: *joshuakwemboi03@gmail.com*
 
